@@ -9,3 +9,4 @@ Simple terraform state to automate certain tasks:
 * Pass the token via an environment variable or by writing that into the `terraform.tfvars` file
   (this file is on the ignore list of git)
 * `terraform init && terraform apply`
+# terraform-automation
