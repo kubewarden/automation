@@ -7,5 +7,5 @@ data "github_organization" "kubewarden" {
 }
 
 data "github_team" "kubewarden_developers" {
-  slug = "kuberwaden-developers"
+  slug = "kubewarden-developers"
 }
