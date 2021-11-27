@@ -2,7 +2,7 @@ terraform {
   required_providers {
     github = {
       source = "integrations/github"
-      version = "4.12.2"
+      version = "4.18.0"
     }
   }
 }
@@ -10,4 +10,5 @@ terraform {
 provider "github" {
   token = var.token
   owner = "kubewarden"
+  alias = "kubewarden"
 }
