@@ -256,7 +256,7 @@ module "policy_repository_safe_labels_policy" {
   source = "./modules/policy_repository"
 
   name                   = "safe-labels-policy"
-  description            = "Kubewarden policy that validates Kubernetes' resource annotations"
+  description            = "Kubewarden policy that validates Kubernetes' resource labels"
   extra_topics           = [ "kubernetes-compliance" ]
   template               = [{
     owner      = "kubewarden"
