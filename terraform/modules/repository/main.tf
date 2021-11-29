@@ -8,11 +8,10 @@ terraform {
 }
 
 locals {
-  policy_topics = [
+  topics = [
     "hacktoberfest",
     "kubernetes",
     "kubernetes-security",
-    "kubewarden-policy",
     "policy-as-code",
     "webassembly",
   ]
@@ -45,7 +44,15 @@ variable "extra_topics" {
   default = []
 }
 
+variable "homepage_url" {
+  default = ""
+}
+
 variable template {
+  default = []
+}
+
+variable pages {
   default = []
 }
 
@@ -55,13 +62,24 @@ variable teams_with_push_rights {
 
 resource "github_repository" "main" {
   name                 = var.name
-  topics               = concat( local.policy_topics, var.extra_topics)
+  topics               = concat( local.topics, var.extra_topics)
   description          = var.description
   has_downloads        = var.has_downloads
   has_issues           = var.has_issues
   has_projects         = var.has_projects
   has_wiki             = var.has_wiki
   vulnerability_alerts = true
+  homepage_url         = var.homepage_url
+
+  dynamic "pages" {
+    for_each = var.pages
+    content {
+      source {
+        branch = pages.value["source_branch"]
+        path   = pages.value["source_path"]
+      }
+    }
+  }
 
   dynamic "template" {
     for_each = var.template

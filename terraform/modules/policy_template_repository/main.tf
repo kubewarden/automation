@@ -12,14 +12,14 @@ locals {
     "hacktoberfest",
     "kubernetes",
     "kubernetes-security",
-    "kubewarden-policy",
+    "kubewarden-policy-template",
     "policy-as-code",
     "webassembly",
   ]
 }
 
 variable "has_downloads" {
-  default = true
+  default = false
 }
 
 variable "has_issues" {
@@ -34,6 +34,10 @@ variable "has_wiki" {
   default = true
 }
 
+variable "is_template" {
+  default = true
+}
+
 variable "name" {
 }
 
@@ -42,10 +46,6 @@ variable "description" {
 }
 
 variable "extra_topics" {
-  default = []
-}
-
-variable template {
   default = []
 }
 
@@ -61,15 +61,8 @@ resource "github_repository" "main" {
   has_issues           = var.has_issues
   has_projects         = var.has_projects
   has_wiki             = var.has_wiki
+  is_template          = var.is_template
   vulnerability_alerts = true
-
-  dynamic "template" {
-    for_each = var.template
-    content {
-      owner      = template.value["owner"]
-      repository = template.value["repository"]
-    }
-  }
 
   lifecycle {
     prevent_destroy = true
