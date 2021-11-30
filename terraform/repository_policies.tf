@@ -281,3 +281,16 @@ module "policy_repository_trusted_repos_policy" {
     github = github.kubewarden
   }
 }
+
+module "policy_repository_readonly_root_filesystem_psp_policy" {
+  source = "./modules/policy_repository"
+
+  name                   = "readonly-root-filesystem-psp-policy"
+  description            = "A Kubewarden policy that enforces root filesystem to be readonly"
+  extra_topics           = [ "pod-security-policy" ]
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
