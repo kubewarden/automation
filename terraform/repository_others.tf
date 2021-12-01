@@ -24,3 +24,21 @@ module "kubewarden_end_to_end_tests_repository" {
     github = github.kubewarden
   }
 }
+
+module "kubewarden_policy_hub_repository" {
+  source = "./modules/repository"
+
+  name                   = "policy-hub"
+  description            = "A place where to find and discover policies"
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+  homepage_url           = "https://hub.kubewarden.io"
+  pages                  = [{
+    source_branch = "gh-pages"
+    source_path   = "/"
+    cname         = "hub.kubewarden.io"
+  }]
+
+  providers = {
+    github = github.kubewarden
+  }
+}

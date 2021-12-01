@@ -74,6 +74,7 @@ resource "github_repository" "main" {
   dynamic "pages" {
     for_each = var.pages
     content {
+      cname = lookup(pages.value, "cname", "")
       source {
         branch = pages.value["source_branch"]
         path   = pages.value["source_path"]
