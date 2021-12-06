@@ -294,3 +294,16 @@ module "policy_repository_readonly_root_filesystem_psp_policy" {
     github = github.kubewarden
   }
 }
+
+module "policy_repository_seccomp_psp_policy" {
+  source = "./modules/policy_repository"
+
+  name                   = "seccomp-psp-policy"
+  description            = "A Kubewarden Pod Security Policy that controls usage of Seccomp profiles"
+  extra_topics           = [ "pod-security-policy" ]
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
