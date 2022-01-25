@@ -25,6 +25,19 @@ module "kubewarden_end_to_end_tests_repository" {
   }
 }
 
+module "kubewarden_github_actions_repository" {
+  source = "./modules/repository"
+
+  name                   = "github-actions"
+  description            = "GitHub actions used by the Kubewarden project"
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
+
+
 module "kubewarden_policy_hub_repository" {
   source = "./modules/repository"
 
