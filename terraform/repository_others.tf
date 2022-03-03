@@ -74,3 +74,17 @@ module "kubewarden_docs_repository" {
     github = github.kubewarden
   }
 }
+
+module "kubewarden_rfc_repository" {
+  source = "./modules/repository"
+
+  name                   = "rfc"
+  description            = "Kubewarden's RFCs"
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id,
+                             data.github_team.kubewarden_documentation.id ]
+  homepage_url           = "https://github.com/kubewarden/"
+
+  providers = {
+    github = github.kubewarden
+  }
+}
