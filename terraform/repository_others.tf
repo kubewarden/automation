@@ -61,13 +61,34 @@ module "kubewarden_docs_repository" {
 
   name                   = "docs"
   description            = "Kubewarden's documentation"
-  teams_with_push_rights = [ data.github_team.kubewarden_developers.id,
-                             data.github_team.kubewarden_documentation.id ]
+  teams_with_push_rights = [
+    data.github_team.kubewarden_developers.id,
+    data.github_team.kubewarden_documentation.id ]
   homepage_url           = "https://docs.kubewarden.io"
   pages                  = [{
     source_branch = "gh-pages"
     source_path   = "/"
     cname         = "docs.kubewarden.io"
+  }]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
+
+module "kubewarden_io_repository" {
+  source = "./modules/repository"
+
+  name                   = "kubewarden.io"
+  description            = "Kubewarden website"
+  teams_with_push_rights = [
+    data.github_team.kubewarden_developers.id,
+    data.github_team.kubewarden_documentation.id ]
+  homepage_url           = "https://kubewarden.io"
+  pages                  = [{
+    source_branch = "gh-pages"
+    source_path   = "/"
+    cname         = "kubewarden.io"
   }]
 
   providers = {
