@@ -307,3 +307,16 @@ module "policy_repository_seccomp_psp_policy" {
     github = github.kubewarden
   }
 }
+
+module "policy_repository_verify_image_signatures_policy" {
+  source = "./modules/policy_repository"
+
+  name                   = "verify-image-signatures"
+  description            = "A Kubewarden Policy that verifies all the signatures of the container images referenced by a Pod"
+  extra_topics           = [ "pod-security-policy" ]
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
