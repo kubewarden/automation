@@ -109,3 +109,16 @@ module "kubewarden_rfc_repository" {
     github = github.kubewarden
   }
 }
+
+module "kubewarden_strfmt_repository" {
+  source = "./modules/repository"
+
+  name                   = "strfmt"
+  description            = "A stripped down version of go-openapi/strfrm that works with TinyGo"
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+  homepage_url           = "https://github.com/kubewarden/"
+
+  providers = {
+    github = github.kubewarden
+  }
+}
