@@ -126,7 +126,7 @@ module "kubewarden_strfmt_repository" {
 module "kubewarden_k8s_objects_repository" {
   source = "./modules/repository"
 
-  name                   = "ks8-objects"
+  name                   = "k8s-objects"
   description            = "Experimental: Kubernetes Go types that can be used with TinyGo"
   teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
   homepage_url           = "https://github.com/kubewarden/"
@@ -139,7 +139,7 @@ module "kubewarden_k8s_objects_repository" {
 module "kubewarden_k8s_objects_generator_repository" {
   source = "./modules/repository"
 
-  name                   = "ks8-objects-generator"
+  name                   = "k8s-objects-generator"
   description            = "CLI tool that generates Kubernetes Go types that can be used with TinyGo starting from the official OpenAPI spec"
   teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
   homepage_url           = "https://github.com/kubewarden/"
