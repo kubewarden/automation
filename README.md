@@ -2,7 +2,7 @@ This repository contains script to automate certain tasks in Kuberwarden project
 
 The directory structure is organized in two major subdirectories. 
 The `terraform` directory has Terraform scripts to ensure all the members of the 
-`kubewarden-develoepers` team have `push` access to all the repositories of 
+`kubewarden-developers` team have `push` access to all the repositories of 
 the organization. 
 The `scripts` directory has other standalone script to automate other things 
 in the organization. 

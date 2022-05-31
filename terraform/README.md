@@ -26,7 +26,7 @@ these are the steps to follow.
 
   1. Identify the file to change. See the table from above
   1. Copy the snippet that declares a policy repository. Ensure you pick
-     a unique terrform identifier, plus change the repository name.
+     a unique terraform identifier, plus change the repository name.
   1. Run the `terraform init` command
   1. Import the repository via `terraform import module.<type of repository>.github_repository.main "<unique id>"`
   1. Run `terraform plan`
