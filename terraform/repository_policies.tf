@@ -320,3 +320,16 @@ module "policy_repository_verify_image_signatures_policy" {
     github = github.kubewarden
   }
 }
+
+module "policy_repository_echo_policy" {
+  source = "./modules/policy_repository"
+
+  name                   = "echo"
+  description            = "A Kubewarden Policy that echoes Kubernetes' AdmissionReview objects"
+  extra_topics           = [ ]
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
