@@ -52,3 +52,20 @@ module "policy_sdk_repository_go" {
     github = github.kubewarden
   }
 }
+
+module "policy_sdk_repository_dotnet" {
+  source = "./modules/repository"
+
+  name                   = "policy-sdk-dotnet"
+  description            = "Kubewarden Policy SDK for the .NET platform"
+  extra_topics           = [
+    "kubewarden-policy-sdk",
+    "dotnet",
+    "csharp",
+  ]
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
