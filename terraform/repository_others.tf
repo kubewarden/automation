@@ -161,3 +161,16 @@ module "kubewarden_rancher_kubectl_builder_repository" {
     github = github.kubewarden
   }
 }
+
+module "kubewarden_utils_repository" {
+  source = "./modules/repository"
+
+  name                   = "utils"
+  description            = "Utils scripts used by the Kubewarden team and users."
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+  homepage_url           = "https://github.com/kubewarden/"
+
+  providers = {
+    github = github.kubewarden
+  }
+}
