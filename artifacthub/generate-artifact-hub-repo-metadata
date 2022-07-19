@@ -23,9 +23,9 @@ def artifacthub_pkg_metadata
   YAML.load(raw)
 end
 
-def generate_metadata(repo)
+def generate_metadata(repo_id)
   {
-    "repositoryID" => repo["repository_id"],
+    "repositoryID" => repo_id,
     "owners" => [
       "name" => "Kubewarden developers",
       "email" => "kubewarden@suse.de",
@@ -39,12 +39,18 @@ def parse_cli
   OptionParser.new do |opts|
     opts.banner = "Usage: publish-to-artifacthub [options]"
 
+    opts.on("-i", "--id [ID]", "ArtifactHub repository ID") do |id|
+      options[:id] = id
+    end
+
     opts.on("-n", "--name [NAME]", "ArtifactHub repository name") do |n|
       options[:name] = n
     end
+
     opts.on("-u", "--user [USER]", "ArtifactHub user owning the repository") do |u|
       options[:user] = u
     end
+
     opts.on("-o", "--organization [ORGANIZATION]", "ArtifactHub organization that owns the repository") do |o|
       options[:org] = o
     end
@@ -53,6 +59,10 @@ def parse_cli
       options[:write] = w
     end
   end.parse!
+
+  if !options[:id].nil?
+    return options
+  end
 
   metadata = artifacthub_pkg_metadata
   if options[:name].nil?
@@ -88,38 +98,44 @@ if !options[:org].nil?
 end
 
 
-full_path = [REPO_SEARCH_ENDPOINT, URI.encode_www_form(params)].join("?")
-uri = URI.parse(ARTIFACTHUB_HOST)
-https = Net::HTTP.new(uri.host, uri.port)
-https.use_ssl = true
+repo_id = if options[:id].nil?
+  full_path = [REPO_SEARCH_ENDPOINT, URI.encode_www_form(params)].join("?")
+  uri = URI.parse(ARTIFACTHUB_HOST)
+  https = Net::HTTP.new(uri.host, uri.port)
+  https.use_ssl = true
 
-headers = {
-  "accept" => "application/json",
-}
+  headers = {
+    "accept" => "application/json",
+  }
 
-req = Net::HTTP::Get.new(full_path, initheader = headers)
-res = https.request(req)
+  req = Net::HTTP::Get.new(full_path, initheader = headers)
+  res = https.request(req)
 
-if res.code != "200"
-  puts "Something went wrong"
-  puts "Response #{res.code} #{res.message}: #{res.body}"
-  exit 1
+  if res.code != "200"
+    puts "Something went wrong"
+    puts "Response #{res.code} #{res.message}: #{res.body}"
+    exit 1
+  end
+
+  matches = JSON.parse!(res.body)
+
+  if matches.count == 0
+    puts "ArtifactHub repository not found"
+    puts "Search params: #{full_path}"
+    exit 1
+  end
+
+  if matches.count > 1
+    puts "More than a match!"
+    puts JSON.pretty_generate(matches)
+    exit 1
+  end
+  matches[0]["repository_id"]
+else
+  options[:id]
 end
 
-matches = JSON.parse!(res.body)
-
-if matches.count == 0
-  puts "ArtifactHub repository not found"
-  exit 1
-end
-
-if matches.count > 1
-  puts "More than a match!"
-  puts JSON.pretty_generate(matches)
-  exit 1
-end
-
-meta = generate_metadata(matches[0])
+meta = generate_metadata(repo_id)
 meta_yaml = YAML.dump(meta)
 
 if options[:write]
