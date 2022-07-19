@@ -1,0 +1,131 @@
+#!/usr/bin/env ruby
+
+require 'json'
+require 'net/http'
+require 'net/https'
+require 'optparse'
+require 'yaml'
+require 'uri'
+
+KUBEWARDEN_KIND_ID = 13
+ARTIFACTHUB_HOST = "https://artifacthub.io"
+REPO_SEARCH_ENDPOINT = "/api/v1/repositories/search"
+
+ARTIFACTHUB_REPO_FILENAME = "artifacthub-repo.yml"
+ARTIFACTHUB_PKG_FILENAME = "artifacthub-pkg.yml"
+
+def artifacthub_pkg_metadata
+  if !File.readable?(ARTIFACTHUB_PKG_FILENAME)
+    return {}
+  end
+
+  raw = File.readlines(ARTIFACTHUB_PKG_FILENAME).join
+  YAML.load(raw)
+end
+
+def generate_metadata(repo)
+  {
+    "repositoryID" => repo["repository_id"],
+    "owners" => [
+      "name" => "Kubewarden developers",
+      "email" => "kubewarden@suse.de",
+    ]
+  }
+end
+
+def parse_cli
+  options = {}
+
+  OptionParser.new do |opts|
+    opts.banner = "Usage: publish-to-artifacthub [options]"
+
+    opts.on("-n", "--name [NAME]", "ArtifactHub repository name") do |n|
+      options[:name] = n
+    end
+    opts.on("-u", "--user [USER]", "ArtifactHub user owning the repository") do |u|
+      options[:user] = u
+    end
+    opts.on("-o", "--organization [ORGANIZATION]", "ArtifactHub organization that owns the repository") do |o|
+      options[:org] = o
+    end
+
+    opts.on("-w", "--[no-]write", "Write to #{ARTIFACTHUB_REPO_FILENAME} instead of STDOUT") do |w|
+      options[:write] = w
+    end
+  end.parse!
+
+  metadata = artifacthub_pkg_metadata
+  if options[:name].nil?
+    options[:name] = metadata["name"]
+  end
+
+  if options[:name].nil?
+    puts "repository name must be provided"
+    exit 1
+  end
+
+  if options[:user].nil? && options[:org].nil?
+    puts "you must provide at least a user or an org"
+    exit 1
+  end
+
+  options
+end
+
+options = parse_cli
+
+params = {
+  "name" => options[:name],
+  "kind" => KUBEWARDEN_KIND_ID,
+}
+
+if !options[:user].nil?
+  params["user"] = [options[:user]]
+end
+
+if !options[:org].nil?
+  params["org"] = [options[:org]]
+end
+
+
+full_path = [REPO_SEARCH_ENDPOINT, URI.encode_www_form(params)].join("?")
+uri = URI.parse(ARTIFACTHUB_HOST)
+https = Net::HTTP.new(uri.host, uri.port)
+https.use_ssl = true
+
+headers = {
+  "accept" => "application/json",
+}
+
+req = Net::HTTP::Get.new(full_path, initheader = headers)
+res = https.request(req)
+
+if res.code != "200"
+  puts "Something went wrong"
+  puts "Response #{res.code} #{res.message}: #{res.body}"
+  exit 1
+end
+
+matches = JSON.parse!(res.body)
+
+if matches.count == 0
+  puts "ArtifactHub repository not found"
+  exit 1
+end
+
+if matches.count > 1
+  puts "More than a match!"
+  puts JSON.pretty_generate(matches)
+  exit 1
+end
+
+meta = generate_metadata(matches[0])
+meta_yaml = YAML.dump(meta)
+
+if options[:write]
+  File.open(ARTIFACTHUB_REPO_FILENAME, "w") { |f| f.write(meta_yaml) }
+  puts "#{ARTIFACTHUB_REPO_FILENAME} created"
+  puts "Don't forget to push it to the Git repository"
+else
+  puts meta_yaml
+end

@@ -1,0 +1,126 @@
+#!/usr/bin/env ruby
+
+require 'json'
+require 'net/http'
+require 'net/https'
+require 'optparse'
+require 'yaml'
+require 'uri'
+
+KUBEWARDEN_KIND_ID = 13
+PUBLISH_REPO_USER_OWNER_ENDPOINT = "https://artifacthub.io/api/v1/repositories/user"
+PUBLISH_REPO_ORG_OWNER_ENDPOINT = "https://artifacthub.io/api/v1/repositories/org"
+
+ARTIFACTHUB_PKG_FILENAME = "artifacthub-pkg.yml"
+
+def artifacthub_pkg_metadata
+  if !File.readable?(ARTIFACTHUB_PKG_FILENAME)
+    return {}
+  end
+
+  raw = File.readlines(ARTIFACTHUB_PKG_FILENAME).join
+  YAML.load(raw)
+end
+
+def parse_cli
+  options = {}
+  api_key_id = ENV["API_KEY_ID"]
+  if api_key_id.nil? || api_key_id.empty?
+    puts "API_KEY_ID env variable not set"
+    exit 1
+  end
+  options[:api_key_id] = api_key_id
+
+  api_key_secret = ENV["API_KEY_SECRET"]
+  if api_key_secret.nil? || api_key_secret.empty?
+    puts "API_KEY_SECRET env variable not set"
+    exit 1
+  end
+  options[:api_key_secret] = api_key_secret
+
+  OptionParser.new do |opts|
+    opts.banner = "Usage: publish-to-artifacthub [options]"
+
+    opts.on("-n", "--name [NAME]", "ArtifactHub repository name. Optional, when not supplied, the program will load it from the `artifacthub-pkg.yml` file.") do |n|
+      options[:name] = n
+    end
+    opts.on("-d", "--display-name [DISPLAY_NAME]", "ArtifactHub repository display name. Optional, when not supplied, the program will load it from the `artifacthub-pkg.yml` file.") do |n|
+      options[:display_name] = n
+    end
+    opts.on("-u", "--url [URL]", "Git repository URL. Optional, when not supplied, the program will load it from the `artifacthub-pkg.yml` file.") do |u|
+      options[:url] = u
+    end
+    opts.on("-b", "--branch [BRANCH]", "Git Repository branch (default `main`)") do |b|
+      options[:branch] = b
+    end
+    opts.on("--organization [ORGANIZATION]", "ArtifactHub organization that will own the repository. Default, the repository is owned by the user") do |o|
+      options[:org] = o
+    end
+
+  end.parse!
+
+  metadata = artifacthub_pkg_metadata
+
+  if options[:url].nil?
+    options[:url] = metadata["homeURL"]
+  end
+
+  if options[:name].nil?
+    options[:name] = metadata["name"]
+  end
+
+  if options[:display_name].nil?
+    options[:display_name] = metadata["displayName"]
+  end
+
+  if options[:branch].nil?
+    options[:branch] = "main"
+  end
+
+  [:name, :display_name, :url].each do |f|
+    if options[f].nil? || options[f].empty?
+      puts "Flag '#{f.to_s}' must be provided"
+      exit 1
+    end
+  end
+
+  options
+end
+
+options = parse_cli
+
+repo_json = {
+    "kind" => KUBEWARDEN_KIND_ID,
+    "name" => options[:name],
+    "display_name" => options[:display_name],
+    "url" => options[:url],
+    "branch" => options[:branch],
+}.to_json
+
+uri = if options[:org].nil?
+  URI.parse(PUBLISH_REPO_USER_OWNER_ENDPOINT)
+else
+  URI.parse("#{PUBLISH_REPO_ORG_OWNER_ENDPOINT}/#{options[:org]}")
+end
+https = Net::HTTP.new(uri.host, uri.port)
+https.use_ssl = true
+
+headers = {
+  "accept" => "application/json",
+  "Content-Type" => "application/json",
+  "X-API-KEY-ID" => options[:api_key_id],
+  "X-API-KEY-SECRET" => options[:api_key_secret],
+}
+
+req = Net::HTTP::Post.new(uri.path, initheader = headers)
+req.body = repo_json
+res = https.request(req)
+
+if res.code == "201"
+  puts "ArtifactHub repository created"
+else
+  puts "Something went wrong"
+  puts "Response #{res.code} #{res.message}: #{res.body}"
+  exit 1
+end
+

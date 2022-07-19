@@ -1,0 +1,103 @@
+#!/usr/bin/env ruby
+
+require 'date'
+require 'optparse'
+require 'yaml'
+
+ARTIFACTHUB_PKG_FILENAME = "artifacthub-pkg.yml"
+
+def policy_hub_metadata_to_artifacthub(policyhub_metadata, policy_version)
+  policy_registry_url = policyhub_metadata["download"]["registry"].gsub("__TAG__", policy_version)
+  artifacthub = {}
+
+  artifacthub["version"] = policy_version.gsub("v", "")
+  artifacthub["name"] = policyhub_metadata["name"]
+  artifacthub["displayName"] = policyhub_metadata["name"].split("-").map{|s| s.capitalize}.join(" ")
+  artifacthub["createdAt"] = DateTime.now.rfc3339
+  artifacthub["description"] = policyhub_metadata["description"]
+  artifacthub["license"] = "Apache-2.0"
+  artifacthub["homeURL"] = policyhub_metadata["homepage"]
+  artifacthub["containersImages"] = [
+    {
+      "name" => "policy",
+      "image" => policy_registry_url,
+    }
+  ]
+  artifacthub["install"] = <<-INSTALL
+The policy can be obtained using [`kwctl`](https://github.com/kubewarden/kwctl/):
+
+```console
+kwctl pull #{policy_registry_url}
+```
+INSTALL
+  artifacthub["keywords"] = policyhub_metadata["keywords"].map{|k| k.downcase}
+  artifacthub["links"] = [
+    {
+      "name" =>  "policy",
+      "url" =>  policyhub_metadata["download"]["url"].gsub("__TAG__", policy_version),
+    },
+    {
+      "name" =>  "source",
+      "url" =>  policyhub_metadata["homepage"],
+    },
+  ]
+  artifacthub["provider"] = { "name" => "kubewarden" }
+  artifacthub["recommendations"] = [
+    { "url" =>  "https://artifacthub.io/packages/helm/kubewarden/kubewarden-controller" },
+  ]
+
+  annotations = {}
+  annotations["kubewarden/resources"] = policyhub_metadata["resources"].join(",")
+  annotations["kubewarden/mutation"] = policyhub_metadata["mutation"]
+  annotations["kubewarden/contextAware"] = policyhub_metadata["contextAware"]
+  artifacthub["annotations"] = annotations
+
+  artifacthub
+end
+
+def parse_cli
+  options = {}
+  OptionParser.new do |opts|
+    opts.banner = "Usage: policyhub2artifacthub [options]"
+
+    opts.on("--policy-version [VERSION]", "Policy version") do |pv|
+      options[:policy_version] = pv
+    end
+
+    opts.on("-w", "--[no-]write", "Write to #{ARTIFACTHUB_PKG_FILENAME} instead of STDOUT") do |w|
+      options[:write] = w
+    end
+
+  end.parse!
+
+  if options[:policy_version].nil? || options[:policy_version].empty?
+    puts "Must provide a policy version"
+    exit 1
+  end
+
+  if ARGV.count == 0
+    options[:policy_hub_file] = "hub.yml"
+  elsif ARGV.count == 1
+    options[:policy_hub_file] = ARGV[0]
+  else
+    puts "Wrong number of args"
+    exit 1
+  end
+
+  options
+end
+
+options = parse_cli
+
+policyhub_data = File.readlines(options[:policy_hub_file]).join
+policyhub = YAML.load(policyhub_data)
+
+artifacthub = policy_hub_metadata_to_artifacthub(policyhub, options[:policy_version])
+artifacthub_yaml = YAML.dump(artifacthub)
+
+if options[:write]
+  File.open(ARTIFACTHUB_PKG_FILENAME, "w") { |f| f.write(artifacthub_yaml) }
+  puts "#{ARTIFACTHUB_PKG_FILENAME} created"
+else
+  puts artifacthub_yaml
+end
