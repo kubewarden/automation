@@ -18,7 +18,7 @@ module "policy_repository_pod_privileged_policy" {
   source = "./modules/policy_repository"
 
   name                   = "pod-privileged-policy"
-  description            = "A Kubewarden Policy written in AssemblyScript that limits the ability to create privileged containers"
+  description            = "A Kubewarden Policy that limits the ability to create privileged containers"
   extra_topics           = [ "pod-security-policy" ]
   teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
 
