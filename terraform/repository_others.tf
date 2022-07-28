@@ -174,3 +174,16 @@ module "kubewarden_utils_repository" {
     github = github.kubewarden
   }
 }
+
+module "kubewarden_load_testing_repository" {
+  source = "./modules/repository"
+
+  name                   = "load-testing"
+  description            = "HTTP load to stress policy-server"
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+  homepage_url           = "https://github.com/kubewarden/"
+
+  providers = {
+    github = github.kubewarden
+  }
+}
