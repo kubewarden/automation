@@ -45,7 +45,7 @@ variable "extra_topics" {
 }
 
 variable "homepage_url" {
-  default = ""
+  default = "https://kubewarden.io"
 }
 
 variable template {

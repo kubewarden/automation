@@ -53,6 +53,10 @@ variable teams_with_push_rights {
   default = []
 }
 
+variable homepage_url {
+  default = "https://kubewarden.io"
+}
+
 resource "github_repository" "main" {
   name                 = var.name
   topics               = concat( local.policy_topics, var.extra_topics)
@@ -62,6 +66,7 @@ resource "github_repository" "main" {
   has_projects         = var.has_projects
   has_wiki             = var.has_wiki
   is_template          = var.is_template
+  homepage_url         = var.homepage_url
   vulnerability_alerts = true
 
   lifecycle {
