@@ -334,10 +334,10 @@ module "policy_repository_echo_policy" {
   }
 }
 
-module "policy_repository_volume_mounts_policy" {
+module "policy_repository_volumeMounts_policy" {
   source = "./modules/policy_repository"
 
-  name                   = "volume-mounts"
+  name                   = "volumeMounts-policy"
   description            = "A Kubewarden Policy that controls the usage of `volumeMounts`"
   teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
 
