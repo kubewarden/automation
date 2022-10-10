@@ -345,3 +345,15 @@ module "policy_repository_volumeMounts_policy" {
     github = github.kubewarden
   }
 }
+
+module "policy_repository_env_variable_secrets_scanner_policy" {
+  source = "./modules/policy_repository"
+
+  name                   = "env-variable-secrets-scanner-policy"
+  description            = "A Kubewarden Policy that detects secrets (ssh private keys, API tokens, etc) leaked via environment variables"
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
