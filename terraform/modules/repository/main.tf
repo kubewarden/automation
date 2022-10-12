@@ -101,3 +101,8 @@ resource "github_team_repository" "gh_team_push_rights" {
   repository = github_repository.main.id
   permission = "push"
 }
+
+resource "github_app_installation_repository" "app_dco" {
+  installation_id    = "29141080"
+  repository         = github_repository.main.name
+}
