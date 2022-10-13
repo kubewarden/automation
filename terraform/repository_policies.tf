@@ -357,3 +357,15 @@ module "policy_repository_env_variable_secrets_scanner_policy" {
     github = github.kubewarden
   }
 }
+
+module "policy_repository_environment_variable_policy" {
+  source = "./modules/policy_repository"
+
+  name                   = "environment-variable-policy"
+  description            = "A Kubewarden Policy that controls the usage of environment variables"
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
