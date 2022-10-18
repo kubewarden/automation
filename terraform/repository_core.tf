@@ -56,3 +56,17 @@ module "kubewarden_kwctl_repository" {
     github = github.kubewarden
   }
 }
+
+module "kubewarden_audit_scanner_repository" {
+  source = "./modules/repository"
+
+  name                   = "audit-scanner"
+  description            = "Reports evaluation of existing Kubernetes resources with your already deployed Kubewarden policies."
+  extra_topics           = [
+  ]
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
