@@ -369,3 +369,15 @@ module "policy_repository_environment_variable_policy" {
     github = github.kubewarden
   }
 }
+
+module "policy_repository_deprecated_api_versions_policy" {
+  source = "./modules/policy_repository"
+
+  name                   = "deprecated-api-versions-policy"
+  description            = "A Kubewarden Policy that detects usage of deprecated and dropped Kubernetes resources"
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
