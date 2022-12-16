@@ -40,7 +40,7 @@ these are the steps to follow.
     files
   1. Push the changes to GitHub
 
-As a concrete exemple, let's add a new repository called `kubewarden/safe-labels-policy`.
+As a concrete example, let's add a new repository called `kubewarden/safe-labels-policy`.
 
 We start by editing the `repository_policies.tf` files. We copy the snippet
 defining an already known repository `policy_repository_safe_annotations_policy`:
