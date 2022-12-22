@@ -381,3 +381,15 @@ module "policy_repository_deprecated_api_versions_policy" {
     github = github.kubewarden
   }
 }
+
+module "policy_repository_sleeping_policy" {
+  source = "./modules/policy_repository"
+
+  name                   = "sleeping-policy"
+  description            = "A test policy that simulates long running policy evaluations"
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
