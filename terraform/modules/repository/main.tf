@@ -2,7 +2,7 @@ terraform {
   required_providers {
     github = {
       source = "integrations/github"
-      version = "5.12.0"
+      version = "5.13.0"
     }
   }
 }
@@ -111,6 +111,21 @@ resource "github_repository" "main" {
     content {
       owner      = template.value["owner"]
       repository = template.value["repository"]
+    }
+  }
+
+  security_and_analysis {
+    advanced_security {
+      status = "enabled"
+    }
+
+    secret_scanning {
+      status = "enabled"
+    }
+
+    secret_scanning_push_protection {
+      # this is still beta
+      status = "disabled"
     }
   }
 
