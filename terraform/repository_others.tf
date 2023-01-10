@@ -173,3 +173,16 @@ module "kubewarden_load_testing_repository" {
     github = github.kubewarden
   }
 }
+
+module "kubewarden_fleet_example_repository" {
+  source = "./modules/repository"
+
+  name                   = "fleet-example"
+  description            = "Example of Rancher Fleet bundle for Kubewarden"
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+  homepage_url           = "https://github.com/kubewarden/"
+
+  providers = {
+    github = github.kubewarden
+  }
+}
