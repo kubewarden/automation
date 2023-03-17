@@ -393,3 +393,27 @@ module "policy_repository_sleeping_policy" {
     github = github.kubewarden
   }
 }
+
+module "policy_repository_context_aware_demo_policy" {
+  source = "./modules/policy_repository"
+
+  name                   = "context-aware-demo"
+  description            = "A demo policy showing how to access Kubernetes resources at policy evaluation time"
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
+
+module "policy_repository_rancher_project_quotas_namespace_validator" {
+  source = "./modules/policy_repository"
+
+  name                   = "rancher-project-quotas-namespace-validator"
+  description            = "Prevent the creation of Namespace under a Rancher Project that doesn't have any resource quota left"
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
