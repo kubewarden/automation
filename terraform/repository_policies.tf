@@ -417,3 +417,15 @@ module "policy_repository_rancher_project_quotas_namespace_validator" {
     github = github.kubewarden
   }
 }
+
+module "policy_repository_psa_label_enforcer" {
+  source = "./modules/policy_repository"
+
+  name                   = "psa-label-enforcer-policy"
+  description            = "Kubewarden policy that ensures that namespaces have the required PSA labels"
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
