@@ -70,10 +70,6 @@ resource "github_repository" "main" {
   vulnerability_alerts = true
 
   security_and_analysis {
-    advanced_security {
-      status = "enabled"
-    }
-
     secret_scanning {
       status = "enabled"
     }
