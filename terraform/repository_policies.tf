@@ -245,6 +245,10 @@ module "policy_repository_safe_annotations_policy" {
   name                   = "safe-annotations-policy"
   description            = "Kubewarden policy that validates Kubernetes' resource annotations"
   extra_topics           = [ "kubernetes-compliance" ]
+  template               = [{
+    owner      = "kubewarden"
+    repository = "go-policy-template"
+  }]
   teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
 
   providers = {
@@ -411,6 +415,22 @@ module "policy_repository_rancher_project_quotas_namespace_validator" {
 
   name                   = "rancher-project-quotas-namespace-validator"
   description            = "Prevent the creation of Namespace under a Rancher Project that doesn't have any resource quota left"
+  template               = [{
+    owner      = "kubewarden"
+    repository = "go-policy-template"
+  }]
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
+
+module "policy_repository_psa_label_enforcer" {
+  source = "./modules/policy_repository"
+
+  name                   = "psa-label-enforcer-policy"
+  description            = "Kubewarden policy that ensures that namespaces have the required PSA labels"
   teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
 
   providers = {
