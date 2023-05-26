@@ -437,3 +437,19 @@ module "policy_repository_psa_label_enforcer" {
     github = github.kubewarden
   }
 }
+
+module "policy_repository_namespace_label_propagator_policy" {
+  source = "./modules/policy_repository"
+
+  name                   = "namespace-label-propagator-policy"
+  description            = "Kubewarden policy designed to automatically propagate labels defined in a Kubernetes namespace to the associated resources within that namespace"
+  template               = [{
+    owner      = "kubewarden"
+    repository = "go-policy-template"
+  }]
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
