@@ -513,3 +513,15 @@ module "policy_repository_raw_validation_opa_policy" {
     github = github.kubewarden
   }
 }
+
+module "policy_repository_unique_ingress_policy" {
+  source = "./modules/policy_repository"
+
+  name                   = "unique-ingress-policy"
+  description            = "Prevent the creation of Ingress resources with duplicated hosts"
+  teams_with_push_rights = [data.github_team.kubewarden_developers.id]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
