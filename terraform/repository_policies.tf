@@ -525,3 +525,15 @@ module "policy_repository_unique_ingress_policy" {
     github = github.kubewarden
   }
 }
+
+module "policy_repository_container_resources_policy" {
+  source = "./modules/policy_repository"
+
+  name                   = "container-resources-policy"
+  description            = "Policy is designed to enforce constraints on the resource requirements of Kubernetes containers"
+  teams_with_push_rights = [data.github_team.kubewarden_developers.id]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
