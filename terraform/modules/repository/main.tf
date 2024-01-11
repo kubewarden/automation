@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     github = {
-      source = "integrations/github"
+      source  = "integrations/github"
       version = "5.43.0"
     }
   }
@@ -48,15 +48,15 @@ variable "homepage_url" {
   default = "https://kubewarden.io"
 }
 
-variable template {
+variable "template" {
   default = []
 }
 
-variable pages {
+variable "pages" {
   default = []
 }
 
-variable teams_with_push_rights {
+variable "teams_with_push_rights" {
   default = []
 }
 
@@ -65,16 +65,16 @@ variable "issue_labels" {
     # Tango palette
     # Terraform labels are case-sensitive, color hex code should not include the
     # leading '#' character
-    "area/dependencies"      = "D3D7CF"
+    "area/dependencies" = "D3D7CF"
 
-    "kind/bug"               = "EF2929"
-    "kind/chore"             = "555753"
-    "kind/enhancement"       = "06989A"
-    "kind/feature"           = "34E2E2"
-    "kind/tech-debt"         = "729FCF"
-    "kind/breaking-change"   = "FCE94F"
-    "kind/automation"        = "3465A4"
-    "kind/question"          = "ad7fa8"
+    "kind/bug"             = "EF2929"
+    "kind/chore"           = "555753"
+    "kind/enhancement"     = "06989A"
+    "kind/feature"         = "34E2E2"
+    "kind/tech-debt"       = "729FCF"
+    "kind/breaking-change" = "FCE94F"
+    "kind/automation"      = "3465A4"
+    "kind/question"        = "ad7fa8"
 
     "release/major"          = "8AE234"
     "release/minor"          = "4E9A06"
@@ -85,15 +85,16 @@ variable "issue_labels" {
 
 
 resource "github_repository" "main" {
-  name                 = var.name
-  topics               = concat( local.topics, var.extra_topics)
-  description          = var.description
-  has_downloads        = var.has_downloads
-  has_issues           = var.has_issues
-  has_projects         = var.has_projects
-  has_wiki             = var.has_wiki
-  vulnerability_alerts = true
-  homepage_url         = var.homepage_url
+  name                        = var.name
+  topics                      = concat(local.topics, var.extra_topics)
+  description                 = var.description
+  has_downloads               = var.has_downloads
+  has_issues                  = var.has_issues
+  has_projects                = var.has_projects
+  has_wiki                    = var.has_wiki
+  homepage_url                = var.homepage_url
+  vulnerability_alerts        = true
+  web_commit_signoff_required = true
 
   dynamic "pages" {
     for_each = var.pages
@@ -138,13 +139,13 @@ resource "github_team_repository" "gh_team_push_rights" {
 }
 
 resource "github_app_installation_repository" "app_dco" {
-  installation_id    = "29141080"
-  repository         = github_repository.main.name
+  installation_id = "29141080"
+  repository      = github_repository.main.name
 }
 
 resource "github_issue_label" "label" {
   repository = github_repository.main.name
-  count      = "${length(var.issue_labels)}"
-  name       = "${element(keys(var.issue_labels), count.index)}"
-  color      = "${element(values(var.issue_labels), count.index)}"
+  count      = length(var.issue_labels)
+  name       = element(keys(var.issue_labels), count.index)
+  color      = element(values(var.issue_labels), count.index)
 }

@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     github = {
-      source = "integrations/github"
+      source  = "integrations/github"
       version = "5.43.0"
     }
   }
@@ -45,28 +45,29 @@ variable "extra_topics" {
   default = []
 }
 
-variable template {
+variable "template" {
   default = []
 }
 
-variable teams_with_push_rights {
+variable "teams_with_push_rights" {
   default = []
 }
 
-variable homepage_url {
+variable "homepage_url" {
   default = "https://kubewarden.io"
 }
 
 resource "github_repository" "main" {
-  name                 = var.name
-  topics               = concat( local.policy_topics, var.extra_topics)
-  description          = var.description
-  has_downloads        = var.has_downloads
-  has_issues           = var.has_issues
-  has_projects         = var.has_projects
-  has_wiki             = var.has_wiki
-  homepage_url         = var.homepage_url
-  vulnerability_alerts = true
+  name                        = var.name
+  topics                      = concat(local.policy_topics, var.extra_topics)
+  description                 = var.description
+  has_downloads               = var.has_downloads
+  has_issues                  = var.has_issues
+  has_projects                = var.has_projects
+  has_wiki                    = var.has_wiki
+  homepage_url                = var.homepage_url
+  vulnerability_alerts        = true
+  web_commit_signoff_required = true
 
   dynamic "template" {
     for_each = var.template
