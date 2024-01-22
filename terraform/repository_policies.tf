@@ -537,3 +537,15 @@ module "policy_repository_container_resources_policy" {
     github = github.kubewarden
   }
 }
+
+module "policy_repository_container_resources_policy" {
+  source = "./modules/policy_repository"
+
+  name                   = "share-pid-namespace-policy"
+  description            = "Policy validates pods sharing processes PID namespace"
+  teams_with_push_rights = [data.github_team.kubewarden_developers.id]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
