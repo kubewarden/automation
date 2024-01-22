@@ -75,6 +75,7 @@ variable "issue_labels" {
     "kind/breaking-change" = "FCE94F"
     "kind/automation"      = "3465A4"
     "kind/question"        = "ad7fa8"
+    "kind/to-be-refined"   = "B14FCF"
 
     "release/major"          = "8AE234"
     "release/minor"          = "4E9A06"
