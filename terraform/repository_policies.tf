@@ -538,7 +538,7 @@ module "policy_repository_container_resources_policy" {
   }
 }
 
-module "policy_repository_container_resources_policy" {
+module "policy_repository_share_pid_namespace_policy" {
   source = "./modules/policy_repository"
 
   name                   = "share-pid-namespace-policy"
