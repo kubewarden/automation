@@ -549,3 +549,15 @@ module "policy_repository_container_resources_policy" {
     github = github.kubewarden
   }
 }
+
+module "policy_repository_go_wasi_context_aware_test_policy" {
+  source = "./modules/policy_repository"
+
+  name                   = "go-wasi-context-aware-test-policy"
+  description            = "A test context-aware policy written using Go Wasi"
+  teams_with_push_rights = [data.github_team.kubewarden_developers.id]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
