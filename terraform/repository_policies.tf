@@ -561,3 +561,15 @@ module "policy_repository_go_wasi_context_aware_test_policy" {
     github = github.kubewarden
   }
 }
+
+module "policy_repository_unique_service_selector" {
+  source = "./modules/policy_repository"
+
+  name                   = "unique-service-selector-policy"
+  description            = "Policy validates that there are no services with the same set of selectors"
+  teams_with_push_rights = [data.github_team.kubewarden_developers.id]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
