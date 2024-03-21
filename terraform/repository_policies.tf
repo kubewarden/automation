@@ -573,3 +573,15 @@ module "policy_repository_unique_service_selector" {
     github = github.kubewarden
   }
 }
+
+module "policy_repository_persistentvolumeclaim-storageclass" {
+  source = "./modules/policy_repository"
+
+  name                   = "persistentvolumeclaim-storageclass-policy"
+  description            = "Policy that validates and adjusts the usage of StorageClasses in PersistentVolumeClaims"
+  teams_with_push_rights = [data.github_team.kubewarden_developers.id]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
