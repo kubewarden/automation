@@ -81,6 +81,8 @@ variable "issue_labels" {
     "release/minor"          = "4E9A06"
     "release/patch"          = "aa6600"
     "release/skip-changelog" = "77cc00"
+
+    "good first issue" = "7057ff" # CNCF landscape expect this exact label string
   }
 }
 
