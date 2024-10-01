@@ -585,3 +585,15 @@ module "policy_repository_persistentvolumeclaim-storageclass" {
     github = github.kubewarden
   }
 }
+
+module "policy_repository_pod_ndots" {
+  source = "./modules/policy_repository"
+
+  name                   = "pod-ndots-policy"
+  description            = "Policy that enforces the usage of ndots in the pod's DNS configuration"
+  teams_with_push_rights = [data.github_team.kubewarden_developers.id]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
