@@ -597,3 +597,20 @@ module "policy_repository_pod_ndots" {
     github = github.kubewarden
   }
 }
+
+module "policy_repository_image_cve_policy" {
+  source = "./modules/policy_repository"
+
+  name                   = "image-cve-policy"
+  description            = "Policy that validates workload based on the vulnerability of the images they make use of"
+  teams_with_push_rights = [data.github_team.kubewarden_developers.id]
+  extra_topics = [
+    "vulnerability-scanner",
+    "cve",
+    "sbom",
+  ]
+
+  providers = {
+    github = github.kubewarden
+  }
+}

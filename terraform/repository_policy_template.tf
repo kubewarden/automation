@@ -32,6 +32,23 @@ module "policy_template_repository_go" {
   }
 }
 
+module "policy_template_repository_go_wasi" {
+  source = "./modules/policy_template_repository"
+
+  name        = "go-wasi-policy-template"
+  description = "Template of a plain WASI policy written using Go "
+  extra_topics = [
+    "go",
+    "golang",
+    "wasi",
+  ]
+  teams_with_push_rights = [data.github_team.kubewarden_developers.id]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
+
 module "policy_template_repository_opa" {
   source = "./modules/policy_template_repository"
 
