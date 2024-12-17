@@ -56,7 +56,7 @@ do_readme() {
 
     echo "# Resources"
     echo "Policy applies to resources kinds:"
-    yq '.spec.targets.kinds | map("`" + . + "`") | join(", ")' "$INDIR/policy.yaml"
+    KINDS="${1:-}" yq '.spec.targets.kinds // (strenv(KINDS) | split(",")) | map("`" + . + "`") | join(", ")' "$INDIR/policy.yaml"
 }
 
 do_metadata() {
@@ -153,7 +153,7 @@ for pol in $POLICIES; do
     fi
 
     # info "Create readme"
-    do_readme | tee "$OUTDIR/README.md"
+    do_readme "$KINDS" | tee "$OUTDIR/README.md"
 
     # info "Create metadata"
     do_metadata "$KINDS" | tee "$OUTDIR/metadata.yml"
