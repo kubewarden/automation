@@ -1,0 +1,128 @@
+kinds_mapping:
+  Pod:
+    apiGroup: ""
+    apiVersion: v1
+    resource: pods
+  Namespace:
+    apiGroup: ""
+    apiVersion: v1
+    resource: namespaces
+  Service:
+    apiGroup: ""
+    apiVersion: v1
+    resource: services
+  ServiceAccount:
+    apiGroup: ""
+    apiVersion: v1
+    resource: serviceaccounts
+  PersistentVolume:
+    apiGroup: ""
+    apiVersion: v1
+    resource: persistentvolumes
+  ReplicationController:
+    apiGroup: ""
+    apiVersion: v1
+    resource: replicationcontrollers
+  Node:
+    apiGroup: ""
+    apiVersion: v1
+    resource: nodes
+  LimitRange:
+    apiGroup: ""
+    apiVersion: v1
+    resource: limitranges
+  ResourceQuota:
+    apiGroup: ""
+    apiVersion: v1
+    resource: resourcequotas
+
+  VolumeSnapshot:
+    apiGroup: snapshot.storage.k8s.io
+    apiVersion: v1
+    resource: volumesnapshots
+  HorizontalPodAutoscaler:
+    apiGroup: autoscaling
+    apiVersion: v2
+    resource: horizontalpodautoscalers
+
+  Deployment:
+    apiGroup: apps
+    apiVersion: v1
+    resource: deployments
+  ReplicaSet:
+    apiGroup: apps
+    apiVersion: v1
+    resource: replicasets
+  DaemonSet:
+    apiGroup: apps
+    apiVersion: v1
+    resource: daemonsets
+  StatefulSet:
+    apiGroup: apps
+    apiVersion: v1
+    resource: statefulsets
+
+  Job:
+    apiGroup: batch
+    apiVersion: v1
+    resource: jobs
+  CronJob:
+    apiGroup: batch
+    apiVersion: v1
+    resource: cronjobs
+
+  Ingress:
+    apiGroup: networking.k8s.io
+    apiVersion: v1
+    resource: ingresses
+  NetworkPolicy:
+    apiGroup: networking.k8s.io
+    apiVersion: v1
+    resource: networkpolicies
+  Gateway:
+    apiGroup: networking.istio.io
+    apiVersion: v1
+    resource: gateways
+
+
+  HelmRelease:
+    apiGroup: helm.toolkit.fluxcd.io
+    apiVersion: v2
+    resource: helmreleases
+  Bucket:
+    apiGroup: source.toolkit.fluxcd.io
+    apiVersion: v1
+    resource: buckets
+  HelmChart:
+    apiGroup: source.toolkit.fluxcd.io
+    apiVersion: v1
+    resource: helmcharts
+  HelmRepository:
+    apiGroup: source.toolkit.fluxcd.io
+    apiVersion: v1
+    resource: helmrepositories
+  GitRepository:
+    apiGroup: source.toolkit.fluxcd.io
+    apiVersion: v1
+    resource: gitrepositories
+  OCIRepository:
+    apiGroup: source.toolkit.fluxcd.io
+    apiVersion: v1beta2
+    resource: ocirepositories
+  Kustomization:
+    apiGroup: kustomize.toolkit.fluxcd.io
+    apiVersion: v1
+    resource: kustomizations
+
+  ClusterRoleBinding:
+    apiGroup: rbac.authorization.k8s.io
+    apiVersion: v1
+    resource: clusterrolebindings
+  Role:
+    apiGroup: rbac.authorization.k8s.io
+    apiVersion: v1
+    resource: roles
+  ClusterRole:
+    apiGroup: rbac.authorization.k8s.io
+    apiVersion: v1
+    resource: clusterroles
