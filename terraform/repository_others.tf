@@ -190,11 +190,16 @@ module "kubewarden_fleet_example_repository" {
 module "kubewarden_community_repository" {
   source = "./modules/repository"
 
-  name        =            "community"
-  description =            "Kubewarden's community repository"
-  teams_with_push_rights = [ data.github_team.kubewarden_developers.id, 
+  name        = "community"
+  description = "Kubewarden's community repository"
+  teams_with_push_rights = [data.github_team.kubewarden_developers.id,
   data.github_team.kubewarden_documentation.id]
-  homepage_url           = "https://github.com/kubewarden/"
+  homepage_url = "https://github.com/kubewarden/"
+
+  providers = {
+    github = github.kubewarden
+  }
+}
 
 module "kubewarden_policy_charts" {
   source = "./modules/repository"
