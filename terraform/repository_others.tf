@@ -196,6 +196,15 @@ module "kubewarden_community_repository" {
   data.github_team.kubewarden_documentation.id]
   homepage_url           = "https://github.com/kubewarden/"
 
+module "kubewarden_policy_charts" {
+  source = "./modules/repository"
+
+  name        = "policy-charts"
+  description = "Kubewarden policy Helm charts for Rancher UI"
+  teams_with_push_rights = [data.github_team.kubewarden_developers.id,
+  data.github_team.kubewarden_documentation.id]
+  homepage_url = "https://github.com/kubewarden/"
+
   providers = {
     github = github.kubewarden
   }
