@@ -631,3 +631,19 @@ module "policy_repository_rego_policies_library" {
     github = github.kubewarden
   }
 }
+
+module "policy_repository_do_not_expose_admission_controller_webhook_services_policy" {
+  source = "./modules/policy_repository"
+
+  name                   = "do-not-expose-admission-controller-webhook-services-policy"
+  description            = "A policy that detects webhook services used by admission controller that are accidentally exposed outside of the cluster"
+  teams_with_push_rights = [data.github_team.kubewarden_developers.id]
+  extra_topics = [
+    "admissioncontroller",
+    "compliance",
+  ]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
