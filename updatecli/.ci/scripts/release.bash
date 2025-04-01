@@ -1,20 +1,23 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Ensure we work from the Updatecli directory
+# Ensure we work from the updatecli directory
 # This is even more important as we use the policy path to generate the policy reference
-pushd updatecli
+SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
+pushd "$SCRIPT_DIR/../../"
 
+: "${UPDATECLI_GITHUB_OWNER:=kubewarden}" # useful for local execution
+
+: "${SOURCE_REPOSITORY:=https://github.com/kubewarden/automation/updatecli}"
+: "${SOURCE_REPOSITORY_FOLDER:=https://github.com/kubewarden/automation/tree/main/updatecli}"
 : "${POLICIES_ROOT_DIR:=policies}"
 : "${POLICY_ERROR:=false}"
-: "${OCI_REPOSITORY:=ghcr.io/updatecli/policies}"
-
-: "${GITHUB_REGISTRY:=}"
+: "${OCI_REPOSITORY:=ghcr.io/${UPDATECLI_GITHUB_OWNER}/updatecli}"
 
 POLICIES=$(find "$POLICIES_ROOT_DIR" -name "Policy.yaml")
 
-# release publish an Updatecli policy version to the registry
-function release(){
+# release publishes an Updatecli policy version to the registry
+function release() {
   local POLICY_ROOT_DIR="$1"
   # Trim policy path with root directory path
   local POLICY_DIR="${1#"$POLICIES_ROOT_DIR/"}"
@@ -27,7 +30,7 @@ function release(){
     "$POLICY_ROOT_DIR"
 }
 
-function runUpdatecliDiff(){
+function runUpdatecliDiff() {
   local POLICY_ROOT_DIR=""
   POLICY_ROOT_DIR="$1"
 
@@ -37,7 +40,7 @@ function runUpdatecliDiff(){
     --values "$POLICY_ROOT_DIR/testdata/values.yaml"
 }
 
-function validateRequiredFile(){
+function validateRequiredFile() {
   local POLICY_ROOT_DIR="$1"
   local POLICY_VALUES="$POLICY_ROOT_DIR/values.yaml"
   local POLICY_README="$POLICY_ROOT_DIR/README.md"
@@ -46,10 +49,8 @@ function validateRequiredFile(){
 
   echo "* validating policy $POLICY_ROOT_DIR"
 
-
   # Checking for files
-  for POLICY_FILE in "$POLICY_VALUES" "$POLICY_CHANGELOG" "$POLICY_README" "$POLICY_METADATA"
-  do
+  for POLICY_FILE in "$POLICY_VALUES" "$POLICY_CHANGELOG" "$POLICY_README" "$POLICY_METADATA"; do
     if [[ ! -f "$POLICY_FILE" ]]; then
 
       POLICY_ERROR=true
@@ -69,9 +70,9 @@ function validateRequiredFile(){
 
   ## Testing that Policy.yaml contains the required information
   local sourceInformation=""
-  sourceInformation=$(grep "source:" "$POLICY_METADATA" )
+  sourceInformation=$(grep "source:" "$POLICY_METADATA")
   sourceInformation=${sourceInformation#"source: "}
-  local expectedSourceInformation="\"https://github.com/updatecli/policies/tree/main/updatecli/$POLICY_ROOT_DIR/\""
+  local expectedSourceInformation="\"$SOURCE_REPOSITORY_FOLDER/$POLICY_ROOT_DIR/\""
   if [[ ! $sourceInformation == "$expectedSourceInformation" ]]; then
     POLICY_ERROR=true
     echo "  * policy $POLICY_ROOT_DIR missing the right source information in Policy.yaml"
@@ -82,7 +83,7 @@ function validateRequiredFile(){
   local documentationInformation=""
   documentationInformation=$(grep "documentation:" "$POLICY_METADATA")
   documentationInformation=${documentationInformation#"documentation: "}
-  local expectedDocumentationInformation="\"https://github.com/updatecli/policies/tree/main/updatecli/$POLICY_ROOT_DIR/README.md\""
+  local expectedDocumentationInformation="\"$SOURCE_REPOSITORY_FOLDER/$POLICY_ROOT_DIR/README.md\""
   if [[ ! $documentationInformation == "$expectedDocumentationInformation" ]]; then
     POLICY_ERROR=true
     echo "  * policy $POLICY_ROOT_DIR missing the right documentation information in Policy.yaml"
@@ -92,9 +93,9 @@ function validateRequiredFile(){
 
   # Testing url annotation is defined
   local urlInformation=""
-  urlInformation=$( grep "url:" "$POLICY_METADATA")
+  urlInformation=$(grep "url:" "$POLICY_METADATA")
   urlInformation=${urlInformation#"url: "}
-  local expectedUrlInformation="\"https://github.com/updatecli/policies/\""
+  local expectedUrlInformation="\"$SOURCE_REPOSITORY/\""
   if [[ ! $urlInformation == "$expectedUrlInformation" ]]; then
     POLICY_ERROR=true
     echo "  * policy $POLICY_ROOT_DIR missing the right url information in Policy.yaml"
@@ -104,7 +105,7 @@ function validateRequiredFile(){
 
   # Testing version annotation is defined
   local versionInformation=""
-  versionInformation=$( grep "version:" "$POLICY_METADATA")
+  versionInformation=$(grep "version:" "$POLICY_METADATA")
   versionInformation=${versionInformation#"version: "}
   if [[ $versionInformation == "" ]]; then
     POLICY_ERROR=true
@@ -113,14 +114,14 @@ function validateRequiredFile(){
 
   # Testing that the latest version has a changelog entry
   local versionChangelogEntry=""
-  versionChangelogEntry=$( grep " $versionInformation" "$POLICY_CHANGELOG")
+  versionChangelogEntry=$(grep " $versionInformation" "$POLICY_CHANGELOG")
   if [[ $versionChangelogEntry == "" ]]; then
     POLICY_ERROR=true
     echo "  * Changelog missing a version entry such as '## $versionInformation' in $POLICY_CHANGELOG"
   fi
 
   # Testing that the latest changelog version is used in the Policy.yaml
-  latestVersionChangelogEntry=$( grep -r '## ' -m 1 "$POLICY_CHANGELOG")
+  latestVersionChangelogEntry=$(grep -r '## ' -m 1 "$POLICY_CHANGELOG")
   latestVersionChangelogEntry=${latestVersionChangelogEntry#"## "}
   if [[ "$latestVersionChangelogEntry" != "$versionInformation" ]]; then
     POLICY_ERROR=true
@@ -130,14 +131,13 @@ function validateRequiredFile(){
   fi
 }
 
-function main(){
+function main() {
 
   PARAM="$1"
 
   GLOBAL_ERROR=0
 
-  for POLICY in $POLICIES
-  do
+  for POLICY in $POLICIES; do
     echo ""
 
     POLICY_ROOT_DIR=$(dirname "$POLICY")
@@ -147,7 +147,7 @@ function main(){
       runUpdatecliDiff "$POLICY_ROOT_DIR"
     fi
 
-    if [[ "$PARAM" == "--unit-test" ||  "$PARAM" == "" ]]; then
+    if [[ "$PARAM" == "--unit-test" || "$PARAM" == "" ]]; then
       validateRequiredFile "$POLICY_ROOT_DIR"
     fi
 
@@ -167,8 +167,7 @@ function main(){
 
   done
 
-    exit "$GLOBAL_ERROR"
+  exit "$GLOBAL_ERROR"
 }
 
 main "${1:-}"
-

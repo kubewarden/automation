@@ -1,4 +1,4 @@
-name: Publish Policies
+name: Publish updatecli policies
 
 on:
   workflow_dispatch:
@@ -27,4 +27,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish
+        working-directory: updatecli
         run: make release
+        env:
+          UPDATECLI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

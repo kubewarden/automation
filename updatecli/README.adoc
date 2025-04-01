@@ -1,11 +1,9 @@
 = README
 
-link:https://matrix.to/#/#Updatecli_community:gitter.im[image:https://img.shields.io/matrix/updatecli:matrix.org[]]
-link:https://github.com/updatecli/policies/blob/main/LICENSE[image:https://img.shields.io/github/license/updatecli/policies[GitHub]]
-link:https://img.shields.io/github/actions/workflow/status/updatecli/policies/validate.yaml?branch=main[image:https://img.shields.io/github/actions/workflow/status/updatecli/policies/validate.yaml?branch=main[GitHub Workflow Status]]
+link:https://img.shields.io/github/actions/workflow/status/kubewarden/automation/validate-updatecli.yaml?branch=main[image:https://img.shields.io/github/actions/workflow/status/kubewarden/automation/validate-updatecli.yaml?branch=main[GitHub Workflow Status]]
 
 
-This repository contains a list of common Updatecli published on ghcr.io/updatecli/policies/**
+This repository contains a list of common Updatecli published on ghcr.io/kubewarden/updatecli/**
 
 == HOWTO
 
@@ -17,13 +15,13 @@ Even though all Updatecli policies published on `ghcr.io` are meant to be public
 
 **Publish**
 
-Each policies defines in this repository are automatically published on ghcr.io via a GitHub Action workflow
+Each of the policies defined in this repository are automatically published on ghcr.io via a GitHub Action workflow
 
 **Show**
 
 We can see the content of the policy by running:
 
-    updatecli manifest show ghcr.io/updatecli/policies/<a policy name>:latest
+    updatecli manifest show ghcr.io/kubewarden/updatecli/<a policy name>:latest
 
 **Use**
 
@@ -31,7 +29,7 @@ They are two ways to execute an Updatecli policy, either running one policy or s
 
 One policy can be executed by running:
 
-    updatecli apply --config ghcr.io/updatecli/policies/<a policy name>:latest
+    updatecli apply --config ghcr.io/kubewarden/updatecli/<a policy name>:latest
 
 
 IMPORTANT: Any values files specified at runtime will override default values setting from the policy bundle
@@ -43,8 +41,8 @@ Assuming we have a file named `update-compose.yaml`, multiple policies can be co
 .update-compose.yaml
 ```yaml
 policies:
-    - policy: "ghcr.io/updatecli/policies/autodiscovery/golang:latest"
-    - policy: "ghcr.io/updatecli/policies/autodiscovery/npm:latest"
+    - policy: "ghcr.io/kubewarden/updatecli/autodiscovery/golang:latest"
+    - policy: "ghcr.io/kubewarden/updatecli/autodiscovery/npm:latest"
 ```
 
 More information about Updatecli compose feature can be found link:https://www.updatecli.io/docs/core/compose/[here]
@@ -55,7 +53,7 @@ Policies can be added by creating a new folder under `updatecli/policies` direct
 The subfolder path will be used as the policy name.
 
 For example if we want to create a policy named `autodiscovery/golang`, we need to create a folder named `updatecli/policies/autodiscovery/golang`.
-This policy will be named `ghcr.io/updatecli/policies/autodiscovery/golang` and will be published on `ghcr.io` docker registry.
+This policy will be named `ghcr.io/kubewarden/updatecli/autodiscovery/golang` and will be published on `ghcr.io` docker registry.
 
 The policy folder must contain:
 
@@ -81,7 +79,7 @@ description: <policy description with maximum 512 characters>
 **Version**
 
 The version must be a valid semantic version. For example `1.0.0` or `1.0.0-beta.1`
-The version will be used as the "tag" for the policy such as `ghcr.io/updatecli/policies/autodiscovery/golang:1.0.0`
+The version will be used as the "tag" for the policy such as `ghcr.io/kubewarden/updatecli/autodiscovery/golang:1.0.0`
 
 Any change to the policy code must be reflected by a new version. Policies are automatically published on `ghcr.io` if the version is updated.
 
