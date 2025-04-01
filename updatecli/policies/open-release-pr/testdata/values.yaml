@@ -1,0 +1,17 @@
+---
+github:
+  owner: "kubewarden"
+  repo: "verify-image-signatures"
+  user: "UPDATECLI_GITHUB_OWNER"
+  token: "UPDATECLI_GITHUB_TOKEN"
+  branch: "main"
+  git_author: "Your bot"
+  git_email: "bot@email.com"
+
+pipelineid: release_draft_pr
+
+pr:
+  automerge: false
+  draft: true
+  labels:
+    - "ci/test"

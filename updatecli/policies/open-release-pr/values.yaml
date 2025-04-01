@@ -1,0 +1,22 @@
+---
+# Values.yaml contains settings that be used from Updatecli manifest.
+
+## github contains the scm settings that can be overriden
+github:
+  owner: ""
+  repo: ""
+  user: "UPDATECLI_GITHUB_OWNER"
+  token: "UPDATECLI_GITHUB_TOKEN"
+  branch: "main"
+  git_author: ""
+  git_email: ""
+
+pipelineid: release_pr # branch will be named: updatecli_main_release_pr
+
+## pr contains the pull request settings that can be overridden
+pr:
+  automerge: false
+  draft: false
+  labels:
+    - "kind/chore"
+    - "area/release"

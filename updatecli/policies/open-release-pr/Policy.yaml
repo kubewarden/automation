@@ -1,0 +1,30 @@
+---
+# Policy.yaml contains metadata for the Updatecli policy.
+
+# Authors is the policy authors
+authors:
+  - Víctor Cuadrado Juan <vcuadradojuan@suse.de>
+  - Olblak <me@olblak.com>
+
+# URL is the policy url
+url: "https://github.com/kubewarden/automation/updatecli/"
+
+# Documentation is the policy documentation URL
+documentation: "https://github.com/kubewarden/automation/tree/main/updatecli/policies/open-release-pr/README.md"
+
+# Source is the policy source URL
+source: "https://github.com/kubewarden/automation/tree/main/updatecli/policies/open-release-pr/"
+
+# Version is the policy version.
+version: 0.1.0
+
+# Vendor is the policy vendor
+vendor: Kubewarden project
+
+# License is the policy licenses
+licenses:
+  - "Apache-2.0 license"
+
+# Description is the short policy description
+description: |
+  Opens GitHub PRs on Kubewarden policy repos, preparing them for a release.
