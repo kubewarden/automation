@@ -23,7 +23,6 @@ This is because the updatecli script is run via the reusable-release-pr workflow
 ```console
 export UPDATECLI_GITHUB_TOKEN=<your token>
 
-rm -rf /tmp/policy-repo; \
 UPDATECLI_GIT_AUTHOR="Kubewarden bot" \
 UPDATECLI_GIT_EMAIL="cncf-kubewarden-maintainers@lists.cncf.io" \
 updatecli apply \

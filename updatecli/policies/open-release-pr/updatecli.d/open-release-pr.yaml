@@ -67,7 +67,6 @@ targets:
       searchpattern: true
       file: "metadata.y*ml"
       key: "$.annotations.'io.kubewarden.policy.version'"
-      # value: '{{ source  "newestGitHubDraftReleaseVersion" }}'
 
   updateCargoTomlVersion:
     name: update Cargo.toml with new version
