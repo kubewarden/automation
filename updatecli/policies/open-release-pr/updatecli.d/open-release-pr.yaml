@@ -151,7 +151,6 @@ scms:
     spec:
       user: "{{ .github.git_author }}"
       email: "{{ .github.git_email }}"
-      directory: "/tmp/policy-repo"
       owner: "{{ .github.owner }}"
       repository: "{{ .github.repo }}"
       token: "{{ requiredEnv .github.token }}"
