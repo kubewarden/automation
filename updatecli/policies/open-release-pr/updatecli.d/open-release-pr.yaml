@@ -34,16 +34,6 @@ sources:
       versionfilter:
         kind: latest
 
-  cargoPackageName:
-    name: Extract cargo package name from Cargo.toml
-    kind: toml
-    scmid: "policy-repo"
-    dependson:
-      - condition#checkCargoTomlExists
-    spec:
-      file: "Cargo.toml"
-      key: "package.name"
-
 conditions:
   checkCargoTomlExists:
     name: Check if Cargo.toml exists
@@ -52,13 +42,6 @@ conditions:
     disablesourceinput: true
     spec:
       file: Cargo.toml
-  checkCargoLockExists:
-    name: Check if Cargo.lock exists
-    scmid: "policy-repo"
-    kind: file
-    disablesourceinput: true
-    spec:
-      file: Cargo.lock
 
 targets:
   updateMetadataAnnotationVersion:
@@ -72,54 +55,20 @@ targets:
       key: "$.annotations.'io.kubewarden.policy.version'"
 
   updateCargoTomlVersion:
-    name: update Cargo.toml with new version
+    name: Update Cargo.toml with new version
     scmid: "policy-repo"
-    disablesourceinput: true
     dependson:
       - condition#checkCargoTomlExists
+    sourceid: newestGitHubDraftReleaseVersion
     kind: shell
     spec:
       shell: /usr/bin/bash
-      command: |
-        export new_version='{{ source "newestGitHubDraftReleaseVersion" }}'
-        awk -v new_version="$new_version" '
-          BEGIN { in_package = 0 }
-          /^\[package\]/ { in_package = 1 }
-          in_package && /^version = / { sub(/version = ".*"/, "version = \"" new_version "\"") }
-          /^\[/ && !/^\[package\]/ { in_package = 0 }
-          { print }
-        ' Cargo.toml > Cargo.toml.tmp && mv Cargo.toml.tmp Cargo.toml
+      command: cargo set-version
       changedif:
         kind: file/checksum
         spec:
           files:
             - Cargo.toml
-
-  updateCargoLockVersion:
-    name: update Cargo.lock with new version
-    scmid: "policy-repo"
-    disablesourceinput: true
-    dependson:
-      - condition#checkCargoLockExists
-      - target#updateCargoTomlVersion
-    kind: shell
-    spec:
-      shell: /usr/bin/bash
-      command: |
-        export package_name='{{ source "cargoPackageName" }}'
-        export new_version='{{ source "newestGitHubDraftReleaseVersion" }}'
-        # note: if testing locally, copy the awk command without trailing spaces
-        awk -v new_version="$new_version" -v package_name="$package_name" '
-          BEGIN { package_found = 0 }
-          /^\[\[package\]\]/ { package_found = 0 }
-          $0 ~ "^name = \"" package_name "\"$" { package_found = 1 }
-          package_found && /^\s*version = / { sub(/version = ".*"/, "version = \"" new_version "\"") }
-          { print }
-        ' Cargo.lock > Cargo.lock.tmp && mv Cargo.lock.tmp Cargo.lock
-      changedif:
-        kind: file/checksum
-        spec:
-          files:
             - Cargo.lock
 
 actions:
