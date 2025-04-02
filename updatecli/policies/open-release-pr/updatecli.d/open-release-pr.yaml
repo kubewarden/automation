@@ -12,6 +12,9 @@ sources:
       token: "{{ requiredEnv .github.token }}"
       key: "title"
       typefilter:
+        # We specifically only want the newest draft release, created with
+        # release-drafter, as its title has the prospective semver that we want
+        # to tag
         draft: true
       versionfilter:
         kind: latest
