@@ -1,5 +1,6 @@
 name: Open a PR that prepares the policy for release
 pipelineid: "{{ .pipelineid }}"
+version: v0.97.0
 
 sources:
   newestGitHubDraftReleaseVersion:
