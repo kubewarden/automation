@@ -49,6 +49,7 @@ targets:
     kind: yaml
     scmid: "policy-repo"
     sourceid: newestGitHubDraftReleaseVersion
+    disableconditions: true
     spec:
       searchpattern: true
       file: "metadata.y*ml"
