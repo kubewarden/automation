@@ -12,7 +12,7 @@ pushd "$SCRIPT_DIR/../../"
 : "${SOURCE_REPOSITORY_FOLDER:=https://github.com/kubewarden/automation/tree/main/updatecli}"
 : "${POLICIES_ROOT_DIR:=policies}"
 : "${POLICY_ERROR:=false}"
-: "${OCI_REPOSITORY:=ghcr.io/${UPDATECLI_GITHUB_OWNER}/updatecli}"
+: "${OCI_REPOSITORY:=ghcr.io/${UPDATECLI_GITHUB_OWNER}/automation/updatecli}"
 
 POLICIES=$(find "$POLICIES_ROOT_DIR" -name "Policy.yaml")
 
