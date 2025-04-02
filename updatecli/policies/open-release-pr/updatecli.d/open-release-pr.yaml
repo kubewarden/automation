@@ -30,7 +30,7 @@ sources:
       owner: "{{ .github.owner }}"
       repository: "{{ .github.repo }}"
       token: "{{ requiredEnv .github.token }}"
-      key: "title"
+      key: "tagname"
       versionfilter:
         kind: latest
 
