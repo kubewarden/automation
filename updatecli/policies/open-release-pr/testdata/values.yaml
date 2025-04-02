@@ -15,3 +15,5 @@ pr:
   draft: true
   labels:
     - "ci/test"
+  reviewers:
+    - "yourorg/yourdevelopers"
