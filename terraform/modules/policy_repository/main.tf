@@ -57,6 +57,34 @@ variable "homepage_url" {
   default = "https://kubewarden.io"
 }
 
+variable "issue_labels" {
+  default = {
+    # Tango palette
+    # Terraform labels are case-sensitive, color hex code should not include the
+    # leading '#' character
+    "area/dependencies" = "D3D7CF"
+    "area/release"      = "F57900"
+
+    "kind/bug"             = "EF2929"
+    "kind/chore"           = "555753"
+    "kind/enhancement"     = "06989A"
+    "kind/feature"         = "34E2E2"
+    "kind/tech-debt"       = "729FCF"
+    "kind/breaking-change" = "FCE94F"
+    "kind/automation"      = "3465A4"
+    "kind/question"        = "ad7fa8"
+    "kind/to-be-refined"   = "B14FCF"
+
+    "release/major"          = "8AE234"
+    "release/minor"          = "4E9A06"
+    "release/patch"          = "aa6600"
+    "release/skip-changelog" = "77cc00"
+    "TRIGGER-RELEASE"        = "8AE234"
+
+    "good first issue" = "7057ff" # CNCF landscape expect this exact label string
+  }
+}
+
 resource "github_repository" "main" {
   name                        = var.name
   topics                      = concat(local.policy_topics, var.extra_topics)
@@ -98,4 +126,11 @@ resource "github_team_repository" "gh_team_push_rights" {
   team_id    = element(var.teams_with_push_rights, count.index)
   repository = github_repository.main.id
   permission = "push"
+}
+
+resource "github_issue_label" "label" {
+  repository = github_repository.main.name
+  count      = length(var.issue_labels)
+  name       = element(keys(var.issue_labels), count.index)
+  color      = element(values(var.issue_labels), count.index)
 }
