@@ -56,7 +56,7 @@ targets:
       key: "$.annotations.'io.kubewarden.policy.version'"
 
   updateCargoTomlVersion:
-    name: Update Cargo.toml with new version
+    name: Update Cargo.toml, Cargo.lock with new version
     scmid: "policy-repo"
     dependson:
       - condition#checkCargoTomlExists
