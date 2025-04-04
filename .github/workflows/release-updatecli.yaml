@@ -1,0 +1,33 @@
+name: Publish updatecli policies
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup updatecli
+        uses: updatecli/updatecli-action@b0d4fd84ae72108930c9adb83bb4beba1acbaf9f # v2.79.0
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3.4.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish
+        working-directory: updatecli
+        run: make release
+        env:
+          UPDATECLI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

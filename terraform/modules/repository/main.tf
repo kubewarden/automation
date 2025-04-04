@@ -82,7 +82,9 @@ variable "issue_labels" {
     "release/patch"          = "aa6600"
     "release/skip-changelog" = "77cc00"
 
-    "good first issue" = "7057ff" # CNCF landscape expect this exact label string
+    "good first issue" = "7057ff" # CNCF landscape expects this exact label string
+
+    "TRIGGER-RELEASE" = "#FBCA04"
   }
 }
 

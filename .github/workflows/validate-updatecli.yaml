@@ -1,0 +1,43 @@
+name: Validate updatecli policies
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup updatecli
+        uses: updatecli/updatecli-action@b0d4fd84ae72108930c9adb83bb4beba1acbaf9f # v2.79.0
+
+      - name: Validate
+        working-directory: updatecli
+        run: make test
+
+      - name: Generate testing token
+        uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1.12.0
+        id: generate-testing-token
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          # Set the owner, so the token can be used for cross-repo dispatch
+          owner: ${{ github.repository_owner }}
+
+      - name: e2e tests
+        # Only run e2e tests from the main branch as we need some credentials
+        # that we don't want to risk leaking from pullrequest opened by random contributors
+        if: github.ref == 'refs/heads/main'
+        working-directory: updatecli
+        run: make e2e-test
+        env:
+          # env vars needed by updatecli policies, even for `updatecli diff`:
+          UPDATECLI_GITHUB_OWNER: ${{ github.repository_owner }}
+          UPDATECLI_GITHUB_TOKEN: ${{ steps.generate-testing-token.outputs.token }}
