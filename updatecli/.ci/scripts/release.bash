@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -uo pipefail
 
 # Ensure we work from the updatecli directory
 # This is even more important as we use the policy path to generate the policy reference
