@@ -16,7 +16,7 @@ documentation: "https://github.com/kubewarden/automation/tree/main/updatecli/pol
 source: "https://github.com/kubewarden/automation/tree/main/updatecli/policies/open-release-pr/"
 
 # Version is the policy version.
-version: 0.1.0
+version: 0.1.1
 
 # Vendor is the policy vendor
 vendor: Kubewarden project
