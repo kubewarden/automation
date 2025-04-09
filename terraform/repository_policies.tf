@@ -647,3 +647,36 @@ module "policy_repository_do_not_expose_admission_controller_webhook_services_po
     github = github.kubewarden
   }
 }
+
+module "policy_repository_cel_policy" {
+  source = "./modules/policy_repository"
+
+  name                   = "cel-policy"
+  description            = "A policy that can run CEL expressions"
+  teams_with_push_rights = [data.github_team.kubewarden_developers.id]
+  extra_topics = [
+    "cel",
+    "validating-admission-policy",
+    "common-expression-language"
+  ]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
+
+module "policy_repository_kyverno_dsl_policy" {
+  source = "./modules/policy_repository"
+
+  name                   = "kyverno-dsl-policy"
+  description            = "[Experimental] Reuse Kyverno policies with Kubewarden"
+  teams_with_push_rights = [data.github_team.kubewarden_developers.id]
+  extra_topics = [
+    "kyverno",
+    "kyverno-policies"
+  ]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
