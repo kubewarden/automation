@@ -28,7 +28,7 @@ def generate_metadata(repo_id)
     "repositoryID" => repo_id,
     "owners" => [
       "name" => "Kubewarden developers",
-      "email" => "kubewarden@suse.de",
+      "email" => "cncf-kubewarden-maintainers@lists.cncf.io",
     ]
   }
 end
