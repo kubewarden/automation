@@ -69,3 +69,20 @@ module "policy_sdk_repository_dotnet" {
     github = github.kubewarden
   }
 }
+
+module "policy_sdk_repository_js" {
+  source = "./modules/repository"
+
+  name                   = "policy-sdk-js"
+  description            = "Experimental Kubewarden SDK for TypeScript and JavaScript"
+  extra_topics           = [
+    "kubewarden-policy-sdk",
+    "javascript",
+    "typescript",
+  ]
+  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+
+  providers = {
+    github = github.kubewarden
+  }
+}

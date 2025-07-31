@@ -135,19 +135,6 @@ module "kubewarden_k8s_objects_generator_repository" {
   }
 }
 
-module "kubewarden_rancher_kubectl_builder_repository" {
-  source = "./modules/repository"
-
-  name                   = "rancher-kubectl-builder"
-  description            = "Workflow to rebuild and sign rancher/kubectl image"
-  teams_with_push_rights = [data.github_team.kubewarden_developers.id]
-  homepage_url           = "https://github.com/kubewarden/"
-
-  providers = {
-    github = github.kubewarden
-  }
-}
-
 module "kubewarden_utils_repository" {
   source = "./modules/repository"
 

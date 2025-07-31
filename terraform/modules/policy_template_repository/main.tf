@@ -2,7 +2,7 @@ terraform {
   required_providers {
     github = {
       source  = "integrations/github"
-      version = "6.6.0"
+      version = "5.37.0"
     }
   }
 }
@@ -58,17 +58,17 @@ variable "homepage_url" {
 }
 
 resource "github_repository" "main" {
-  name                        = var.name
-  topics                      = concat(local.policy_topics, var.extra_topics)
-  description                 = var.description
-  has_downloads               = var.has_downloads
-  has_issues                  = var.has_issues
-  has_projects                = var.has_projects
-  has_wiki                    = var.has_wiki
-  is_template                 = var.is_template
-  homepage_url                = var.homepage_url
-  vulnerability_alerts        = true
-  web_commit_signoff_required = true
+  name                 = var.name
+  topics               = concat(local.policy_topics, var.extra_topics)
+  description          = var.description
+  has_downloads        = var.has_downloads
+  has_issues           = var.has_issues
+  has_projects         = var.has_projects
+  has_wiki             = var.has_wiki
+  is_template          = var.is_template
+  homepage_url         = var.homepage_url
+  vulnerability_alerts = true
+  #web_commit_signoff_required = true
 
   security_and_analysis {
     secret_scanning {
@@ -87,8 +87,8 @@ resource "github_repository" "main" {
 }
 
 resource "github_team_repository" "gh_team_push_rights" {
-  count      = length(var.teams_with_push_rights)
-  team_id    = element(var.teams_with_push_rights, count.index)
+  for_each   = toset(var.teams_with_push_rights)
+  team_id    = each.value
   repository = github_repository.main.id
   permission = "push"
 }
