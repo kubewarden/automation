@@ -111,3 +111,19 @@ module "policy_template_repository_dotnet" {
     github = github.kubewarden
   }
 }
+
+module "policy_template_repository_js" {
+  source = "./modules/policy_template_repository"
+
+  name        = "js-policy-template"
+  description = "A template repository to quickly scaffold a Kubewarden policy written with the TypeScript or JavaScript languages"
+  extra_topics = [
+    "javascript",
+    "typescript",
+  ]
+  teams_with_push_rights = [data.github_team.kubewarden_developers.id]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
