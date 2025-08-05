@@ -74,6 +74,7 @@ variable "issue_labels" {
     "kind/automation"      = "3465A4"
     "kind/question"        = "ad7fa8"
     "kind/to-be-refined"   = "B14FCF"
+    "kind/carryover"       = "8AE234"
 
     "release/major"          = "8AE234"
     "release/minor"          = "4E9A06"
