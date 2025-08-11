@@ -696,8 +696,8 @@ module "policy_repository_priority_class_policy" {
 module "policy_repository_workload_annotations_policy" {
   source = "./modules/policy_repository"
 
-  name                   = "workload-annotations-policy"
-  description            = "Validates workloads annotations"
+  name                   = "annotations-policy"
+  description            = "Validates annotations"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
   providers = {
@@ -708,8 +708,8 @@ module "policy_repository_workload_annotations_policy" {
 module "policy_repository_workload_labels_policy" {
   source = "./modules/policy_repository"
 
-  name                   = "workload-labels-policy"
-  description            = "Validates workloads labels"
+  name                   = "labels-policy"
+  description            = "Validates labels"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
   providers = {
