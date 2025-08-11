@@ -159,4 +159,10 @@ resource "github_issue_label" "label" {
   repository = github_repository.main.name
   name       = each.key
   color      = each.value
+
+  // ignore changes to etag attibute. This is safe to do, as this is an internal
+  // metadata field and doesn't represent a real change to the label.
+  lifecycle {
+    ignore_changes = [etag]
+  }
 }
