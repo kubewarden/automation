@@ -20,14 +20,14 @@ jobs:
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
       - name: Setup updatecli
-        uses: updatecli/updatecli-action@419b75cb4d4bd6b50b03da7b33e1e0065d383eaf # v2.89.0
+        uses: updatecli/updatecli-action@a327da0e796f543b8fa4706e5ed63014852ead0e # v2.91.0
 
       - name: Validate
         working-directory: updatecli
         run: make test
 
       - name: Generate testing token
-        uses: actions/create-github-app-token@0f859bf9e69e887678d5bbfbee594437cb440ffe # v2.1.0
+        uses: actions/create-github-app-token@a8d616148505b5069dccd32f177bb87d7f39123b # v2.1.1
         id: generate-testing-token
         with:
           app-id: ${{ secrets.APP_ID }}
