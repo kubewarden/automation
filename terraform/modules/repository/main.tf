@@ -85,6 +85,7 @@ variable "issue_labels" {
     "release/skip-changelog" = "77cc00"
 
     "good first issue" = "7057ff" # CNCF landscape expects this exact label string
+    "help wanted"      = "f0ad4e" # CNCF landscape expects this exact label string
   }
 }
 

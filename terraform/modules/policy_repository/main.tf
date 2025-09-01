@@ -84,6 +84,7 @@ variable "issue_labels" {
     "TRIGGER-RELEASE"        = "8AE234"
 
     "good first issue" = "7057ff" # CNCF landscape expect this exact label string
+    "help wanted"      = "f0ad4e" # CNCF landscape expects this exact label string
   }
 }
 
