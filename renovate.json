@@ -5,7 +5,6 @@
     "schedule:earlyMondays",
     "helpers:pinGitHubActionDigests"
   ],
-  "labels": [
-    "area/dependencies"
-  ]
+  "labels": ["area/dependencies"],
+  "ignoreDeps": ["integrations/terraform-provider-github"]
 }
