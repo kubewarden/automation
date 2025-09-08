@@ -1,10 +1,14 @@
 {
   "extends": [
-    "config:base",
+    "config:recommended",
     "group:allNonMajor",
     "schedule:earlyMondays",
     "helpers:pinGitHubActionDigests"
   ],
-  "labels": ["area/dependencies"],
-  "ignoreDeps": ["integrations/terraform-provider-github"]
+  "labels": [
+    "area/dependencies"
+  ],
+  "ignoreDeps": [
+    "integrations/github"
+  ]
 }
