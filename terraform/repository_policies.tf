@@ -716,3 +716,15 @@ module "policy_repository_workload_labels_policy" {
     github = github.kubewarden
   }
 }
+
+module "policy_policies" {
+  source = "./modules/policy_repository"
+
+  name                   = "policies"
+  description            = "Kubewarden policies"
+  teams_with_push_rights = [data.github_team.kubewarden_developers.id]
+
+  providers = {
+    github = github.kubewarden
+  }
+}
