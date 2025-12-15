@@ -16,10 +16,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
       - name: Setup updatecli
-        uses: updatecli/updatecli-action@9c04c99c508b3ac7851020724a912adde546f64b # v2.95.0
+        uses: updatecli/updatecli-action@b846825b298f5351abd80f94c4f9eab63a38a804 # v2.98.0
 
       - name: Log in to the Container registry
         uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
