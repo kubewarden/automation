@@ -95,8 +95,13 @@ variable "extra_issue_labels" {
 }
 
 variable "archived" {
-  type        = bool
-  default     = false
+  type    = bool
+  default = false
+}
+
+variable "vulnerability_alerts" {
+  type    = bool
+  default = true
 }
 
 locals {
@@ -113,7 +118,7 @@ resource "github_repository" "main" {
   has_projects         = var.has_projects
   has_wiki             = var.has_wiki
   homepage_url         = var.homepage_url
-  vulnerability_alerts = true
+  vulnerability_alerts = var.vulnerability_alerts
   #web_commit_signoff_required = true
 
   dynamic "pages" {

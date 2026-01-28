@@ -1,9 +1,10 @@
 module "policy_repository_ingress_policy" {
   source = "./modules/policy_repository"
 
-  name        = "ingress-policy"
-  archived    = true
-  description = "Policy to enforce requirements on Kubernetes Ingress resources."
+  name                 = "ingress-policy"
+  archived             = true
+  vulnerability_alerts = false
+  description          = "Policy to enforce requirements on Kubernetes Ingress resources."
   extra_topics = [
     "ingress",
     "ingresses-resources",
@@ -20,6 +21,7 @@ module "policy_repository_pod_privileged_policy" {
 
   name                   = "pod-privileged-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "A Kubewarden Policy that limits the ability to create privileged containers"
   extra_topics           = ["pod-security-policy"]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
@@ -34,6 +36,7 @@ module "policy_repository_pod_runtime_class_policy" {
 
   name                   = "pod-runtime-class-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "A Kubewarden Policy that controls the usage of Pod runtimeClass"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -45,9 +48,10 @@ module "policy_repository_pod_runtime_class_policy" {
 module "policy_repository_disallow_service_loadbalancer_policy" {
   source = "./modules/policy_repository"
 
-  name        = "disallow-service-loadbalancer-policy"
-  archived    = true
-  description = "A policy that prevents the creation of Service resources with type LoadBalancer"
+  name                 = "disallow-service-loadbalancer-policy"
+  archived             = true
+  vulnerability_alerts = false
+  description          = "A policy that prevents the creation of Service resources with type LoadBalancer"
   extra_topics = [
     "open-policy-agent",
     "gatekeeper"
@@ -62,9 +66,10 @@ module "policy_repository_disallow_service_loadbalancer_policy" {
 module "policy_repository_disallow_service_nodeport_policy" {
   source = "./modules/policy_repository"
 
-  name        = "disallow-service-nodeport-policy"
-  archived    = true
-  description = "A policy that prevents the creation of Service resources with type NodePort"
+  name                 = "disallow-service-nodeport-policy"
+  archived             = true
+  vulnerability_alerts = false
+  description          = "A policy that prevents the creation of Service resources with type NodePort"
   extra_topics = [
     "open-policy-agent",
     "gatekeeper"
@@ -81,6 +86,7 @@ module "policy_repository_user_group_psp_policy" {
 
   name                   = "user-group-psp-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "This Kubewarden Policy is a replacement for the Kubernetes Pod Security Policy that controls containers user and groups"
   extra_topics           = ["pod-security-policy"]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
@@ -95,6 +101,7 @@ module "policy_repository_allow_privilege_escalation_psp_policy" {
 
   name                   = "allow-privilege-escalation-psp-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "A Kubewarden Pod Security Policy that controls usage of allowPrivilegeEscalation"
   extra_topics           = ["pod-security-policy"]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
@@ -109,6 +116,7 @@ module "policy_repository_allowed_fsgroups_psp_policy" {
 
   name                   = "allowed-fsgroups-psp-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "Replacement for the Kubernetes Pod Security Policy that controls the usage of fsGroup in the pod security context"
   extra_topics           = ["pod-security-policy"]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
@@ -123,6 +131,7 @@ module "policy_repository_allowed_proc_mount_types_psp_policy" {
 
   name                   = "allowed-proc-mount-types-psp-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "Replacement for the Kubernetes Pod Security Policy that controls the usage of /proc mount types"
   extra_topics           = ["pod-security-policy"]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
@@ -137,6 +146,7 @@ module "policy_repository_apparmor_psp_policy" {
 
   name                   = "apparmor-psp-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "A Kubewarden Pod Security Policy that controls usage of AppArmor profiles"
   extra_topics           = ["pod-security-policy"]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
@@ -151,6 +161,7 @@ module "policy_repository_capabilities_psp_policy" {
 
   name                   = "capabilities-psp-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "A Pod Security Policy that controls Container Capabilities"
   extra_topics           = ["pod-security-policy"]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
@@ -165,6 +176,7 @@ module "policy_repository_flexvolume_drivers_psp_policy" {
 
   name                   = "flexvolume-drivers-psp-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "Replacement for the Kubernetes Pod Security Policy that controls the allowed `flexVolume` drivers"
   extra_topics           = ["pod-security-policy"]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
@@ -179,6 +191,7 @@ module "policy_repository_host_namespaces_psp_policy" {
 
   name                   = "host-namespaces-psp-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "Replacement for the Kubernetes Pod Security Policy that controls the usage of host namespaces"
   extra_topics           = ["pod-security-policy"]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
@@ -191,10 +204,11 @@ module "policy_repository_host_namespaces_psp_policy" {
 module "policy_repository_hostpaths_psp_policy" {
   source = "./modules/policy_repository"
 
-  name         = "hostpaths-psp-policy"
-  archived     = true
-  description  = "Replacement for the Kubernetes Pod Security Policy that controls the usage of hostpaths"
-  extra_topics = ["pod-security-policy"]
+  name                 = "hostpaths-psp-policy"
+  archived             = true
+  vulnerability_alerts = false
+  description          = "Replacement for the Kubernetes Pod Security Policy that controls the usage of hostpaths"
+  extra_topics         = ["pod-security-policy"]
   template = [{
     owner      = "kubewarden"
     repository = "go-policy-template"
@@ -211,6 +225,7 @@ module "policy_repository_selinux_psp_policy" {
 
   name                   = "selinux-psp-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "Replacement for the Kubernetes Pod Security Policy that controls the usage of SELinux"
   extra_topics           = ["pod-security-policy"]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
@@ -223,10 +238,11 @@ module "policy_repository_selinux_psp_policy" {
 module "policy_repository_sysctl_psp_policy" {
   source = "./modules/policy_repository"
 
-  name         = "sysctl-psp-policy"
-  archived     = true
-  description  = "A Kubewarden policy that controls usage of sysctls"
-  extra_topics = ["pod-security-policy"]
+  name                 = "sysctl-psp-policy"
+  archived             = true
+  vulnerability_alerts = false
+  description          = "A Kubewarden policy that controls usage of sysctls"
+  extra_topics         = ["pod-security-policy"]
   template = [{
     owner      = "kubewarden"
     repository = "go-policy-template"
@@ -241,10 +257,11 @@ module "policy_repository_sysctl_psp_policy" {
 module "policy_repository_volumes_psp_policy" {
   source = "./modules/policy_repository"
 
-  name         = "volumes-psp-policy"
-  archived     = true
-  description  = "Replacement for the Kubernetes Pod Security Policy that controls the usage of volumes"
-  extra_topics = ["pod-security-policy"]
+  name                 = "volumes-psp-policy"
+  archived             = true
+  vulnerability_alerts = false
+  description          = "Replacement for the Kubernetes Pod Security Policy that controls the usage of volumes"
+  extra_topics         = ["pod-security-policy"]
   template = [{
     owner      = "kubewarden"
     repository = "go-policy-template"
@@ -259,10 +276,11 @@ module "policy_repository_volumes_psp_policy" {
 module "policy_repository_safe_annotations_policy" {
   source = "./modules/policy_repository"
 
-  name         = "safe-annotations-policy"
-  archived     = true
-  description  = "Kubewarden policy that validates Kubernetes' resource annotations"
-  extra_topics = ["kubernetes-compliance"]
+  name                 = "safe-annotations-policy"
+  archived             = true
+  vulnerability_alerts = false
+  description          = "Kubewarden policy that validates Kubernetes' resource annotations"
+  extra_topics         = ["kubernetes-compliance"]
   template = [{
     owner      = "kubewarden"
     repository = "go-policy-template"
@@ -277,10 +295,11 @@ module "policy_repository_safe_annotations_policy" {
 module "policy_repository_safe_labels_policy" {
   source = "./modules/policy_repository"
 
-  name         = "safe-labels-policy"
-  archived     = true
-  description  = "Kubewarden policy that validates Kubernetes' resource labels"
-  extra_topics = ["kubernetes-compliance"]
+  name                 = "safe-labels-policy"
+  archived             = true
+  vulnerability_alerts = false
+  description          = "Kubewarden policy that validates Kubernetes' resource labels"
+  extra_topics         = ["kubernetes-compliance"]
   template = [{
     owner      = "kubewarden"
     repository = "go-policy-template"
@@ -297,6 +316,7 @@ module "policy_repository_trusted_repos_policy" {
 
   name                   = "trusted-repos-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "A Kubewarden policy that restricts what registries, tags and images can pods on your cluster refer to"
   extra_topics           = ["kubernetes-compliance"]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
@@ -311,6 +331,7 @@ module "policy_repository_readonly_root_filesystem_psp_policy" {
 
   name                   = "readonly-root-filesystem-psp-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "A Kubewarden policy that enforces root filesystem to be readonly"
   extra_topics           = ["pod-security-policy"]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
@@ -325,6 +346,7 @@ module "policy_repository_seccomp_psp_policy" {
 
   name                   = "seccomp-psp-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "A Kubewarden Pod Security Policy that controls usage of Seccomp profiles"
   extra_topics           = ["pod-security-policy"]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
@@ -339,6 +361,7 @@ module "policy_repository_verify_image_signatures_policy" {
 
   name                   = "verify-image-signatures"
   archived               = true
+  vulnerability_alerts   = false
   description            = "A Kubewarden Policy that verifies all the signatures of the container images referenced by a Pod"
   extra_topics           = ["pod-security-policy"]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
@@ -353,6 +376,7 @@ module "policy_repository_echo_policy" {
 
   name                   = "echo"
   archived               = true
+  vulnerability_alerts   = false
   description            = "A Kubewarden Policy that echoes Kubernetes' AdmissionReview objects"
   extra_topics           = []
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
@@ -367,6 +391,7 @@ module "policy_repository_volumeMounts_policy" {
 
   name                   = "volumeMounts-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "A Kubewarden Policy that controls the usage of `volumeMounts`"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -380,6 +405,7 @@ module "policy_repository_env_variable_secrets_scanner_policy" {
 
   name                   = "env-variable-secrets-scanner-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "A Kubewarden Policy that detects secrets (ssh private keys, API tokens, etc) leaked via environment variables"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -393,6 +419,7 @@ module "policy_repository_environment_variable_policy" {
 
   name                   = "environment-variable-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "A Kubewarden Policy that controls the usage of environment variables"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -406,6 +433,7 @@ module "policy_repository_deprecated_api_versions_policy" {
 
   name                   = "deprecated-api-versions-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "A Kubewarden Policy that detects usage of deprecated and dropped Kubernetes resources"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -419,6 +447,7 @@ module "policy_repository_sleeping_policy" {
 
   name                   = "sleeping-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "A test policy that simulates long running policy evaluations"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -432,6 +461,7 @@ module "policy_repository_context_aware_demo_policy" {
 
   name                   = "context-aware-demo"
   archived               = true
+  vulnerability_alerts   = false
   description            = "A demo policy showing how to access Kubernetes resources at policy evaluation time"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -443,9 +473,10 @@ module "policy_repository_context_aware_demo_policy" {
 module "policy_repository_rancher_project_quotas_namespace_validator" {
   source = "./modules/policy_repository"
 
-  name        = "rancher-project-quotas-namespace-validator"
-  archived    = true
-  description = "Prevent the creation of Namespace under a Rancher Project that doesn't have any resource quota left"
+  name                 = "rancher-project-quotas-namespace-validator"
+  archived             = true
+  vulnerability_alerts = false
+  description          = "Prevent the creation of Namespace under a Rancher Project that doesn't have any resource quota left"
   template = [{
     owner      = "kubewarden"
     repository = "go-policy-template"
@@ -462,6 +493,7 @@ module "policy_repository_psa_label_enforcer" {
 
   name                   = "psa-label-enforcer-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "Kubewarden policy that ensures that namespaces have the required PSA labels"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -473,9 +505,10 @@ module "policy_repository_psa_label_enforcer" {
 module "policy_repository_namespace_label_propagator_policy" {
   source = "./modules/policy_repository"
 
-  name        = "namespace-label-propagator-policy"
-  archived    = true
-  description = "Kubewarden policy designed to automatically propagate labels defined in a Kubernetes namespace to the associated resources within that namespace"
+  name                 = "namespace-label-propagator-policy"
+  archived             = true
+  vulnerability_alerts = false
+  description          = "Kubewarden policy designed to automatically propagate labels defined in a Kubernetes namespace to the associated resources within that namespace"
   template = [{
     owner      = "kubewarden"
     repository = "go-policy-template"
@@ -492,6 +525,7 @@ module "policy_repository_raw_validation_policy" {
 
   name                   = "raw-validation-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "Demo policy showing how to write a raw validating policy"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -505,6 +539,7 @@ module "policy_repository_raw_mutation_policy" {
 
   name                   = "raw-mutation-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "Demo policy showing how to write a raw mutating policy"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -518,6 +553,7 @@ module "policy_repository_raw_validation_wasi_policy" {
 
   name                   = "raw-validation-wasi-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "Demo policy showing how to write a raw WASI validating policy"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -531,6 +567,7 @@ module "policy_repository_raw_mutation_wasi_policy" {
 
   name                   = "raw-mutation-wasi-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "Demo policy showing how to write a raw WASI mutation policy"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -544,6 +581,7 @@ module "policy_repository_raw_validation_opa_policy" {
 
   name                   = "raw-validation-opa-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "Demo policy showing how to write a raw OPA validating policy"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -557,6 +595,7 @@ module "policy_repository_unique_ingress_policy" {
 
   name                   = "unique-ingress-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "Prevent the creation of Ingress resources with duplicated hosts"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -570,6 +609,7 @@ module "policy_repository_container_resources_policy" {
 
   name                   = "container-resources-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "Policy is designed to enforce constraints on the resource requirements of Kubernetes containers"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -583,6 +623,7 @@ module "policy_repository_share_pid_namespace_policy" {
 
   name                   = "share-pid-namespace-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "Policy validates pods sharing processes PID namespace"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -596,6 +637,7 @@ module "policy_repository_go_wasi_context_aware_test_policy" {
 
   name                   = "go-wasi-context-aware-test-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "A test context-aware policy written using Go Wasi"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -609,6 +651,7 @@ module "policy_repository_unique_service_selector" {
 
   name                   = "unique-service-selector-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "Policy validates that there are no services with the same set of selectors"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -622,6 +665,7 @@ module "policy_repository_persistentvolumeclaim-storageclass" {
 
   name                   = "persistentvolumeclaim-storageclass-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "Policy that validates and adjusts the usage of StorageClasses in PersistentVolumeClaims"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -635,6 +679,7 @@ module "policy_repository_pod_ndots" {
 
   name                   = "pod-ndots-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "Policy that enforces the usage of ndots in the pod's DNS configuration"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -648,6 +693,7 @@ module "policy_repository_image_cve_policy" {
 
   name                   = "image-cve-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "Policy that validates workloads based on the vulnerability of the images they make use of"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
   extra_topics = [
@@ -683,6 +729,7 @@ module "policy_repository_do_not_expose_admission_controller_webhook_services_po
 
   name                   = "do-not-expose-admission-controller-webhook-services-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "A policy that detects webhook services used by admission controller that are accidentally exposed outside of the cluster"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
   extra_topics = [
@@ -700,6 +747,7 @@ module "policy_repository_cel_policy" {
 
   name                   = "cel-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "A policy that can run CEL expressions"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
   extra_topics = [
@@ -718,6 +766,7 @@ module "policy_repository_kyverno_dsl_policy" {
 
   name                   = "kyverno-dsl-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "[Experimental] Reuse Kyverno policies with Kubewarden"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
   extra_topics = [
@@ -735,6 +784,7 @@ module "policy_repository_priority_class_policy" {
 
   name                   = "priority-class-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "Validates Pod's priority class"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -748,6 +798,7 @@ module "policy_repository_workload_annotations_policy" {
 
   name                   = "annotations-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "Validates annotations"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 
@@ -761,6 +812,7 @@ module "policy_repository_workload_labels_policy" {
 
   name                   = "labels-policy"
   archived               = true
+  vulnerability_alerts   = false
   description            = "Validates labels"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
 

@@ -1,9 +1,10 @@
 module "kubewarden_policy_fetcher_repository" {
   source = "./modules/repository"
 
-  name        = "policy-fetcher"
-  archived    = true
-  description = "Crate used by Kubewarden that is able to pull policies from OCI registries and HTTP servers."
+  name                 = "policy-fetcher"
+  archived             = true
+  vulnerability_alerts = false
+  description          = "Crate used by Kubewarden that is able to pull policies from OCI registries and HTTP servers."
   extra_topics = [
   ]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
@@ -30,9 +31,10 @@ module "kubewarden_kubewarden_controller_repository" {
 module "kubewarden_policy_server_repository" {
   source = "./modules/repository"
 
-  name        = "policy-server"
-  archived    = true
-  description = "Webhook server that evaluates WebAssembly policies to validate Kubernetes requests"
+  name                 = "policy-server"
+  archived             = true
+  vulnerability_alerts = false
+  description          = "Webhook server that evaluates WebAssembly policies to validate Kubernetes requests"
   extra_topics = [
     "kubernetes-webhook",
     "policy",
@@ -48,9 +50,10 @@ module "kubewarden_policy_server_repository" {
 module "kubewarden_kwctl_repository" {
   source = "./modules/repository"
 
-  name        = "kwctl"
-  archived    = true
-  description = "Go-to CLI tool for Kubewarden users"
+  name                 = "kwctl"
+  archived             = true
+  vulnerability_alerts = false
+  description          = "Go-to CLI tool for Kubewarden users"
   extra_topics = [
   ]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
@@ -63,9 +66,10 @@ module "kubewarden_kwctl_repository" {
 module "kubewarden_audit_scanner_repository" {
   source = "./modules/repository"
 
-  name        = "audit-scanner"
-  archived    = true
-  description = "Reports evaluation of existing Kubernetes resources with your already deployed Kubewarden policies."
+  name                 = "audit-scanner"
+  archived             = true
+  vulnerability_alerts = false
+  description          = "Reports evaluation of existing Kubernetes resources with your already deployed Kubewarden policies."
   extra_topics = [
   ]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
