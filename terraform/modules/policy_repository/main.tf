@@ -93,12 +93,19 @@ variable "extra_issue_labels" {
   type    = map(string)
 }
 
+variable "archived" {
+  description = "Whether the repository is archived."
+  type        = bool
+  default     = false
+}
+
 locals {
   merged_issue_labels = merge(var.issue_labels, var.extra_issue_labels)
 }
 
 resource "github_repository" "main" {
   name                 = var.name
+  archived             = var.archived
   topics               = concat(local.policy_topics, var.extra_topics)
   description          = var.description
   has_downloads        = var.has_downloads
