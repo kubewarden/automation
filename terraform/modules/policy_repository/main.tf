@@ -88,6 +88,15 @@ variable "issue_labels" {
   }
 }
 
+variable "extra_issue_labels" {
+  default = {}
+  type    = map(string)
+}
+
+locals {
+  merged_issue_labels = merge(var.issue_labels, var.extra_issue_labels)
+}
+
 resource "github_repository" "main" {
   name                 = var.name
   topics               = concat(local.policy_topics, var.extra_topics)
@@ -132,7 +141,7 @@ resource "github_team_repository" "gh_team_push_rights" {
 }
 
 resource "github_issue_label" "label" {
-  for_each   = var.issue_labels
+  for_each   = local.merged_issue_labels
   repository = github_repository.main.name
   name       = each.key
   color      = each.value
