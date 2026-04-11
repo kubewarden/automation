@@ -17,17 +17,17 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Setup updatecli
-        uses: updatecli/updatecli-action@2cc8e6d8e356d76b0280cdd03766c36596a0614e # v3.0.0
+        uses: updatecli/updatecli-action@3e2cbfd2d4bec97ce3ec7155da54ddf599893026 # v3.1.0
 
       - name: Validate
         working-directory: updatecli
         run: make test
 
       - name: Generate testing token
-        uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3.0.0
+        uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
         id: generate-testing-token
         with:
           app-id: ${{ secrets.APP_ID }}
