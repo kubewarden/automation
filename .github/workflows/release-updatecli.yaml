@@ -19,10 +19,10 @@ jobs:
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
 
       - name: Setup updatecli
-        uses: updatecli/updatecli-action@2cc8e6d8e356d76b0280cdd03766c36596a0614e # v3.0.0
+        uses: updatecli/updatecli-action@5bda7da77bf4d181bce5f807d73d832b62062acf # v3.3.0
 
       - name: Log in to the Container registry
-        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0.0
+        uses: docker/login-action@c99871dec2022cc055c062a10cc1a1310835ceb4 # v4.3.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
