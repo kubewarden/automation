@@ -201,3 +201,15 @@ module "kubewarden_policy_charts" {
     github = github.kubewarden
   }
 }
+
+module "kubewarden_qa_hub_repository" {
+  source = "./modules/repository"
+
+  name                   = "qa-hub"
+  description            = "Kubewarden QA Hub"
+  teams_with_push_rights = [data.github_team.kubewarden_developers.id]
+
+  providers = {
+    github = github.kubewarden
+  }
+}

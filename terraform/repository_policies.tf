@@ -21,6 +21,7 @@ module "policy_policies" {
   name                   = "policies"
   description            = "Kubewarden policies"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
+  allow_auto_merge       = true
 
   extra_issue_labels = {
     "TRIGGER-RELEASE"                                = "8AE234"

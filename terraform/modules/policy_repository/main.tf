@@ -88,6 +88,10 @@ variable "issue_labels" {
   }
 }
 
+variable "allow_auto_merge" {
+  default = false
+}
+
 variable "extra_issue_labels" {
   default = {}
   type    = map(string)
@@ -106,6 +110,7 @@ resource "github_repository" "main" {
   has_projects         = var.has_projects
   has_wiki             = var.has_wiki
   homepage_url         = var.homepage_url
+  allow_auto_merge     = var.allow_auto_merge
   vulnerability_alerts = true
   #web_commit_signoff_required = true
 
