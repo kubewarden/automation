@@ -59,17 +59,17 @@ variable "homepage_url" {
 }
 
 resource "github_repository" "main" {
-  name                 = var.name
-  topics               = concat(local.policy_topics, var.extra_topics)
-  description          = var.description
-  has_downloads        = var.has_downloads
-  has_issues           = var.has_issues
-  has_projects         = var.has_projects
-  has_wiki             = var.has_wiki
-  is_template          = var.is_template
-  homepage_url         = var.homepage_url
-  vulnerability_alerts = true
-  #web_commit_signoff_required = true
+  name                        = var.name
+  topics                      = concat(local.policy_topics, var.extra_topics)
+  description                 = var.description
+  has_downloads               = var.has_downloads
+  has_issues                  = var.has_issues
+  has_projects                = var.has_projects
+  has_wiki                    = var.has_wiki
+  is_template                 = var.is_template
+  homepage_url                = var.homepage_url
+  vulnerability_alerts        = true
+  web_commit_signoff_required = true
 
   security_and_analysis {
     secret_scanning {

@@ -107,17 +107,17 @@ locals {
 }
 
 resource "github_repository" "main" {
-  name                 = var.name
-  topics               = concat(local.topics, var.extra_topics)
-  description          = var.description
-  has_downloads        = var.has_downloads
-  has_issues           = var.has_issues
-  has_projects         = var.has_projects
-  has_wiki             = var.has_wiki
-  homepage_url         = var.homepage_url
-  allow_auto_merge     = var.allow_auto_merge
-  vulnerability_alerts = true
-  #web_commit_signoff_required = true
+  name                        = var.name
+  topics                      = concat(local.topics, var.extra_topics)
+  description                 = var.description
+  has_downloads               = var.has_downloads
+  has_issues                  = var.has_issues
+  has_projects                = var.has_projects
+  has_wiki                    = var.has_wiki
+  homepage_url                = var.homepage_url
+  allow_auto_merge            = var.allow_auto_merge
+  vulnerability_alerts        = true
+  web_commit_signoff_required = true
 
   dynamic "pages" {
     for_each = var.pages
