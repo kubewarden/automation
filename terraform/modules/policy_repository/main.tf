@@ -3,7 +3,7 @@ terraform {
     github = {
       source = "integrations/github"
       # WARNING: do not update to a version > 5.37.0 until https://github.com/integrations/terraform-provider-github/issues/2077 is resolved
-      version = "5.37.0"
+      version = "5.45.0"
     }
   }
 }
@@ -102,17 +102,17 @@ locals {
 }
 
 resource "github_repository" "main" {
-  name                 = var.name
-  topics               = concat(local.policy_topics, var.extra_topics)
-  description          = var.description
-  has_downloads        = var.has_downloads
-  has_issues           = var.has_issues
-  has_projects         = var.has_projects
-  has_wiki             = var.has_wiki
-  homepage_url         = var.homepage_url
-  allow_auto_merge     = var.allow_auto_merge
-  vulnerability_alerts = true
-  #web_commit_signoff_required = true
+  name                        = var.name
+  topics                      = concat(local.policy_topics, var.extra_topics)
+  description                 = var.description
+  has_downloads               = var.has_downloads
+  has_issues                  = var.has_issues
+  has_projects                = var.has_projects
+  has_wiki                    = var.has_wiki
+  homepage_url                = var.homepage_url
+  allow_auto_merge            = var.allow_auto_merge
+  vulnerability_alerts        = true
+  web_commit_signoff_required = true
 
   dynamic "template" {
     for_each = var.template
