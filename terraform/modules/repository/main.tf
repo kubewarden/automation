@@ -1,25 +1,19 @@
 terraform {
   required_providers {
     github = {
-      source = "integrations/github"
-      # WARNING: do not update to a version > 5.37.0 until https://github.com/integrations/terraform-provider-github/issues/2077 is resolved
-      version = "5.45.0"
+      source  = "integrations/github"
+      version = "6.13.0"
     }
   }
 }
 
-locals {
-  topics = [
+variable "topics" {
+  default = [
     "hacktoberfest",
     "kubernetes",
     "kubernetes-security",
     "policy-as-code",
-    "webassembly",
   ]
-}
-
-variable "has_downloads" {
-  default = true
 }
 
 variable "has_issues" {
@@ -93,6 +87,18 @@ variable "allow_auto_merge" {
   default = false
 }
 
+variable "allow_squash_merge" {
+  default = true
+}
+
+variable "allow_rebase_merge" {
+  default = true
+}
+
+variable "delete_branch_on_merge" {
+  default = false
+}
+
 variable "secret_scanning_push_protection" {
   default = "disabled"
 }
@@ -108,15 +114,16 @@ locals {
 
 resource "github_repository" "main" {
   name                        = var.name
-  topics                      = concat(local.topics, var.extra_topics)
+  topics                      = concat(var.topics, var.extra_topics)
   description                 = var.description
-  has_downloads               = var.has_downloads
   has_issues                  = var.has_issues
   has_projects                = var.has_projects
   has_wiki                    = var.has_wiki
   homepage_url                = var.homepage_url
   allow_auto_merge            = var.allow_auto_merge
-  vulnerability_alerts        = true
+  allow_squash_merge          = var.allow_squash_merge
+  allow_rebase_merge          = var.allow_rebase_merge
+  delete_branch_on_merge      = var.delete_branch_on_merge
   web_commit_signoff_required = true
 
   dynamic "pages" {
@@ -151,6 +158,11 @@ resource "github_repository" "main" {
   lifecycle {
     prevent_destroy = true
   }
+}
+
+resource "github_repository_vulnerability_alerts" "main" {
+  repository = github_repository.main.name
+  enabled    = true
 }
 
 resource "github_team_repository" "gh_team_push_rights" {

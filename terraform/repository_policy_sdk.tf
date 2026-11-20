@@ -7,6 +7,7 @@ module "policy_sdk_repository_rust" {
     "kubewarden-policy-sdk",
     "rust",
     "rust-language",
+    "webassembly",
   ]
   teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
 
@@ -23,6 +24,7 @@ module "policy_sdk_repository_swift" {
   extra_topics           = [
     "kubewarden-policy-sdk",
     "swift",
+    "webassembly",
   ]
   homepage_url           = "https://kubewarden.github.io/policy-sdk-swift/"
   teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
@@ -45,6 +47,7 @@ module "policy_sdk_repository_go" {
     "kubewarden-policy-sdk",
     "go",
     "tinygo",
+    "webassembly",
   ]
   teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
 
@@ -62,6 +65,7 @@ module "policy_sdk_repository_dotnet" {
     "kubewarden-policy-sdk",
     "dotnet",
     "csharp",
+    "webassembly",
   ]
   teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
 
@@ -79,6 +83,7 @@ module "policy_sdk_repository_js" {
     "kubewarden-policy-sdk",
     "javascript",
     "typescript",
+    "webassembly",
   ]
   teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
 

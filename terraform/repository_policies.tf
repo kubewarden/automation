@@ -1,20 +1,3 @@
-module "policy_repository_rego_policies_library" {
-  source = "./modules/policy_repository"
-
-  name                   = "rego-policies-library"
-  description            = "A collection of Rego policies that can be used to enforce best practices in Kubernetes clusters"
-  teams_with_push_rights = [data.github_team.kubewarden_developers.id]
-  extra_topics = [
-    "rego",
-    "compliance",
-    "gatekeeper",
-  ]
-
-  providers = {
-    github = github.kubewarden
-  }
-}
-
 module "policy_policies" {
   source = "./modules/policy_repository"
 
@@ -22,6 +5,7 @@ module "policy_policies" {
   description            = "Kubewarden policies"
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
   allow_auto_merge       = true
+  delete_branch_on_merge = true
 
   extra_issue_labels = {
     "TRIGGER-RELEASE"                                = "8AE234"

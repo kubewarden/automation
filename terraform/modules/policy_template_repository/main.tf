@@ -1,9 +1,8 @@
 terraform {
   required_providers {
     github = {
-      source = "integrations/github"
-      # WARNING: do not update to a version > 5.37.0 until https://github.com/integrations/terraform-provider-github/issues/2077 is resolved
-      version = "5.45.0"
+      source  = "integrations/github"
+      version = "6.13.0"
     }
   }
 }
@@ -17,10 +16,6 @@ locals {
     "policy-as-code",
     "webassembly",
   ]
-}
-
-variable "has_downloads" {
-  default = false
 }
 
 variable "has_issues" {
@@ -62,13 +57,11 @@ resource "github_repository" "main" {
   name                        = var.name
   topics                      = concat(local.policy_topics, var.extra_topics)
   description                 = var.description
-  has_downloads               = var.has_downloads
   has_issues                  = var.has_issues
   has_projects                = var.has_projects
   has_wiki                    = var.has_wiki
   is_template                 = var.is_template
   homepage_url                = var.homepage_url
-  vulnerability_alerts        = true
   web_commit_signoff_required = true
 
   security_and_analysis {
@@ -85,6 +78,11 @@ resource "github_repository" "main" {
   lifecycle {
     prevent_destroy = true
   }
+}
+
+resource "github_repository_vulnerability_alerts" "main" {
+  repository = github_repository.main.name
+  enabled    = true
 }
 
 resource "github_team_repository" "gh_team_push_rights" {

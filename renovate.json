@@ -7,8 +7,5 @@
   ],
   "labels": [
     "area/dependencies"
-  ],
-  "ignoreDeps": [
-    "integrations/github"
   ]
 }

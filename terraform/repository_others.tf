@@ -29,6 +29,7 @@ module "kubewarden_policy_hub_repository" {
 
   name                   = "policy-hub"
   description            = "A place where to find and discover policies"
+  extra_topics           = ["webassembly"]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
   homepage_url           = "https://hub.kubewarden.io"
   pages = [{
@@ -45,12 +46,16 @@ module "kubewarden_policy_hub_repository" {
 module "kubewarden_docs_repository" {
   source = "./modules/repository"
 
-  name        = "docs"
-  description = "Kubewarden's documentation"
+  name         = "docs"
+  description  = "Kubewarden's documentation"
+  extra_topics = ["webassembly"]
   teams_with_push_rights = [
     data.github_team.kubewarden_developers.id,
   data.github_team.kubewarden_documentation.id]
   homepage_url = "https://docs.kubewarden.io"
+
+  delete_branch_on_merge = true
+
   pages = [{
     source_branch = "gh-pages"
     source_path   = "/"
@@ -65,8 +70,9 @@ module "kubewarden_docs_repository" {
 module "kubewarden_io_repository" {
   source = "./modules/repository"
 
-  name        = "kubewarden.io"
-  description = "Kubewarden website"
+  name         = "kubewarden.io"
+  description  = "Kubewarden website"
+  extra_topics = ["webassembly"]
   teams_with_push_rights = [
     data.github_team.kubewarden_developers.id,
   data.github_team.kubewarden_documentation.id]
@@ -101,6 +107,7 @@ module "kubewarden_strfmt_repository" {
 
   name                   = "strfmt"
   description            = "A stripped down version of go-openapi/strfrm that works with TinyGo"
+  extra_topics           = ["webassembly"]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
   homepage_url           = "https://github.com/kubewarden/"
 
@@ -114,6 +121,7 @@ module "kubewarden_k8s_objects_repository" {
 
   name                   = "k8s-objects"
   description            = "Experimental: Kubernetes Go types that can be used with TinyGo"
+  extra_topics           = ["webassembly"]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
   homepage_url           = "https://github.com/kubewarden/"
 
@@ -127,6 +135,7 @@ module "kubewarden_k8s_objects_generator_repository" {
 
   name                   = "k8s-objects-generator"
   description            = "CLI tool that generates Kubernetes Go types that can be used with TinyGo starting from the official OpenAPI spec"
+  extra_topics           = ["webassembly"]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id]
   homepage_url           = "https://github.com/kubewarden/"
 
@@ -177,8 +186,9 @@ module "kubewarden_fleet_example_repository" {
 module "kubewarden_community_repository" {
   source = "./modules/repository"
 
-  name        = "community"
-  description = "Kubewarden's community repository"
+  name         = "community"
+  description  = "Kubewarden's community repository"
+  extra_topics = ["webassembly"]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id,
   data.github_team.kubewarden_documentation.id]
   homepage_url = "https://github.com/kubewarden/"
@@ -191,8 +201,9 @@ module "kubewarden_community_repository" {
 module "kubewarden_policy_charts" {
   source = "./modules/repository"
 
-  name        = "policy-charts"
-  description = "Kubewarden policy Helm charts for Rancher UI"
+  name         = "policy-charts"
+  description  = "Kubewarden policy Helm charts for Rancher UI"
+  extra_topics = ["webassembly"]
   teams_with_push_rights = [data.github_team.kubewarden_developers.id,
   data.github_team.kubewarden_documentation.id]
   homepage_url = "https://github.com/kubewarden/"

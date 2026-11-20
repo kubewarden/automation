@@ -1,141 +1,161 @@
-This directory contains a series of terraform states that are used
-to manage the Kubewarden organization on GitHub.
+# Terraform configuration for the Kubewarden GitHub organization
 
-The terraform states currently manage these resources:
+The files in this directory manage the repositories of the `kubewarden`
+organization on GitHub.
 
-# Repositories
+For each repository, Terraform manages these items:
 
-> **WARNINING:** do **not** create new repositories by hand, using the GitHub
-> web UI.
-> Instead, declare a new repository inside of the appropriate file and
-> then ask one of the owners of the organization to run a `terraform apply`.
+- The configuration of the repository (description, homepage, topics, merge methods)
+- The standard issue labels
+- The entry of the repository in the DCO GitHub App
+- The vulnerability alerts
+- The `push` permission of teams, if the declaration names teams
 
-This terraform-based automation is able to handle these kind of repositories:
+Do not create a repository by hand in the GitHub web UI. Declare the repository
+in the applicable file. Then ask an owner of the organization to run
+`terraform apply`.
 
+## Files
 
-| Purpose         | File to be changed              |
-|-----------------|---------------------------------|
-| Policy          | `repository_policies.tf`        |
-| Policy SDK      | `repository_policy_sdk.tf`      |
-| Policy Template | `repository_policy_template.tf` |
+| Type of repository | File                            | Module                               |
+|--------------------|---------------------------------|--------------------------------------|
+| Core component     | `repository_core.tf`            | `modules/repository`                 |
+| Policy             | `repository_policies.tf`        | `modules/policy_repository`          |
+| Policy SDK         | `repository_policy_sdk.tf`      | `modules/repository`                 |
+| Policy template    | `repository_policy_template.tf` | `modules/policy_template_repository` |
+| Other              | `repository_others.tf`          | `modules/repository`                 |
 
-## Importing an already existing repository
+## Before you start
 
-Importing an already existing repository into terraform is possible,
-these are the steps to follow.
+1. Create a GitHub Personal Access Token (PAT) with an account that is an owner
+   of the organization.
+2. Write the token in the `terraform.tfvars` file. Git ignores this file.
 
-  1. Identify the file to change. See the table from above
-  1. Copy the snippet that declares a policy repository. Ensure you pick
-     a unique terraform identifier, plus change the repository name.
-  1. Run the `terraform init` command
-  1. Import the repository via `terraform import module.<type of repository>.github_repository.main "<unique id>"`
-  1. Run `terraform plan`
-  1. Look at what terraform would change, do the proper changes to the
-     repository definition inside of terraform
-  1. Run `terraform apply`. Please **read carefully** all the operation terraform
-     would do. A repository might be **permanently deleted** by terraform. Please
-     double check what is going to be done!
-  1. Apply the changes proposed by terraform
-  1. Commit all the changes to git, especially the ones done to the `*.tfstate*`
-    files
-  1. Push the changes to GitHub
+   ```hcl
+   token = "<your token>"
+   ```
 
-As a concrete example, let's add a new repository called `kubewarden/safe-labels-policy`.
+3. Run `terraform init`.
 
-We start by editing the `repository_policies.tf` files. We copy the snippet
-defining an already known repository `policy_repository_safe_annotations_policy`:
+## State file
+
+The state file is the record of the resources that Terraform manages. The state
+file is `terraform.tfstate`. We keep this file in git.
+
+After each command that changes the state file, commit the file and push it.
+These commands are `terraform apply` and `terraform state rm`. If you do not
+commit the file, the next person starts from an old state file.
+
+## Topics
+
+The `modules/repository` module gives these base topics to each repository:
+`hacktoberfest`, `kubernetes`, `kubernetes-security`, `policy-as-code`.
+
+Two attributes change the topics of a repository:
+
+- `extra_topics` adds topics to the base topics
+- `topics` replaces the base topics
+
+The modules for policies and for policy templates have their own base topics.
+These two modules accept only `extra_topics`.
+
+## Add a new repository
+
+1. Find the file for the type of repository in the table.
+2. Copy the declaration of a similar repository.
+3. Change the name of the module and the `name` attribute.
+4. Run `terraform plan`.
+5. Make sure that the plan creates only the resources of the new repository.
+6. Run `terraform apply`.
+7. Commit the changes and the state file. Then push.
+
+## Import a repository that exists on GitHub
+
+An import adds a resource that exists on GitHub to the state file. The import
+does not change the resource.
+
+A repository that exists has some of the resources that the module declares.
+You must import each of these resources. If you do not import a label that
+exists, `terraform apply` fails, because GitHub does not accept two labels with
+the same name.
+
+| Resource        | Address in the module                                     | Import ID                |
+|-----------------|-----------------------------------------------------------|--------------------------|
+| Repository      | `github_repository.main`                                  | `<repository>`           |
+| DCO GitHub App  | `github_app_installation_repository.app_dco`              | `29141080:<repository>`  |
+| Issue label     | `github_issue_label.label["<label>"]`                     | `<repository>:<label>`   |
+| Team permission | `github_team_repository.gh_team_push_rights["<team ID>"]` | `<team ID>:<repository>` |
+
+The `issue_labels` variable of each module lists the standard labels. This
+command shows the labels that a repository has:
+
+```console
+gh label list --repo kubewarden/<repository>
+```
+
+Do these steps:
+
+1. Declare the repository in the applicable file.
+2. Give each attribute the value that the repository has on GitHub.
+3. Create a temporary `imports.tf` file with one `import` block for each resource.
+4. Run `terraform plan`.
+5. Read the plan. If the plan changes a value that must stay, change the declaration.
+6. Do steps 4 and 5 again until the plan is correct.
+7. Run `terraform apply`.
+8. Delete the `imports.tf` file.
+9. Commit the changes and the state file. Then push.
+
+### Example
+
+This `imports.tf` file imports the `gateway-protector` repository. The
+repository had five of the standard labels before the import.
 
 ```hcl
-module "policy_repository_safe_annotations_policy" {
-  source = "./modules/policy_repository"
+import {
+  to = module.kubewarden_gateway_protector_repository.github_repository.main
+  id = "gateway-protector"
+}
 
-  name                   = "safe-annotations-policy"
-  description            = "Kubewarden policy that validates Kubernetes' resource annotations"
-  extra_topics           = [ "kubernetes-compliance" ]
-  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+import {
+  to = module.kubewarden_gateway_protector_repository.github_app_installation_repository.app_dco
+  id = "29141080:gateway-protector"
+}
 
-  providers = {
-    github = github.kubewarden
-  }
+import {
+  for_each = toset([
+    "area/dependencies",
+    "kind/bug",
+    "kind/chore",
+    "good first issue",
+    "help wanted",
+  ])
+  to = module.kubewarden_gateway_protector_repository.github_issue_label.label[each.key]
+  id = "gateway-protector:${each.key}"
 }
 ```
 
-We declaring a new repository object for `kubewarden/safe-labels-policy` by copy
-and pasting the previous snippet with some minor changes:
+## Remove a repository
 
-```hcl
-module "policy_repository_safe_labels_policy" {
-  source = "./modules/policy_repository"
+Remove a repository from Terraform when the organization archives it. This
+procedure does not change the repository on GitHub.
 
-  name                   = "safe-labels-policy"
-  description            = "Kubewarden policy that validates Kubernetes' resource annotations"
-  extra_topics           = [ "kubernetes-compliance" ]
-  teams_with_push_rights = [ data.github_team.kubewarden_developers.id ]
+1. Run `terraform state rm module.<name of the module>`.
+2. Delete the declaration of the module.
+3. Run `terraform plan`.
+4. Make sure that the plan shows no changes for the repository.
+5. Commit the changes and the state file. Then push.
 
-  providers = {
-    github = github.kubewarden
-  }
-}
-```
-
-We basically changed the name of the terraform resource to be
-`policy_repository_safe_labels_policy`. We also changed the `name` attribute.
-
-We can now run:
-
-```console
-terraform init
-terraform import \
-  module.policy_repository_safe_labels_policy.github_repository.main \
-  "safe-labels-policy"
-```
-
-It's really important to provide the right input to the `terraform import` command:
-
-  * 1st param - resource name: the string `policy_repository_safe_labels_policy` references the
-    name of the resource that we just defined
-  * 2nd param - unique terraform id: this must be the name of the repository as
-    declared inside of GitHub.
-    You do not have to provide the organization name, the code automatically adds it.
-
-Once this command is done, the current values of the `kubewarden/safe-labels-policy`
-repository are going to be known by terraform.
-
-Because of that, running the following code will report a configuration drift:
-
-```console
-terraform plan
-```
-
-You will notice some of the known attributes of the repository are going to be
-changed to reflect what is declared inside of the `repository_policies.tf` file.
-
-For example, the `description` and the `template` attributes will change. Probably
-some `topics` will change too.
-Some of these changes are good (the new tags), while others are bad (the description
-and the template ones).
-
-Keep iterating over these steps until terraform produces a satisfying plan:
-
-  1. Change the declaration of the repository inside of the terraform file
-  1. Run `terraform plan`
-
-Once everything is set, run `terraform apply`. Again, be 100% sure about the changes
-terraform will perform.
+CAUTION: Do step 1 before step 2. If you delete the declaration first, Terraform
+tries to destroy the repository and `terraform plan` fails.
 
 ## Known issues
 
-We have used terraform modules to reduce the boilerplate. This is great, but has
-some drawbacks too:
-
-* The resources and the modules have to be explicit about which instance of the `github`
-  provider has to be used. In theory this is not needed, however the `terraform import`
-  didn't work without these extra lines.
-* There's some duplication between the different type of repositories the modules
-  define. We could maybe come up with a single repository module definition. However
-  we would then have to reimport all the repositories that are already known.
-  That's because the name of the module is part of the repository ID. This would
-  be a major PITA, plus we might risk to accidentally delete a repository if we
-  are not extra careful.
-
-
+- Each declaration names the instance of the `github` provider. The
+  `terraform import` command did not work without these lines.
+- The three modules contain duplicate code. The name of the module is part of
+  the address of each resource. As a result, a merge of the modules makes a new
+  import of each repository necessary.
+- Terraform shows a deprecation warning for the `pages` block of four
+  repositories: `docs`, `kubewarden.io`, `policy-hub`, and `policy-sdk-swift`.
+  The provider recommends the `github_repository_pages` resource as the
+  replacement.
